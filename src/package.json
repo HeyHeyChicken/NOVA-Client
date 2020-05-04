@@ -1,0 +1,28 @@
+{
+  "name": "nova-client",
+  "version": "1.0.0",
+  "description": "This is the NOVA client.",
+  "main": "index.js",
+  "author": "Antoine Duval",
+  "license": "SEE LICENSE IN LICENSE FILE",
+  "dependencies": {
+    "child_process": "^1.0.2",
+    "chrome-remote-interface": "^0.28.1",
+    "colors": "^1.4.0",
+    "ejs": "^3.0.2",
+    "express": "^4.17.1",
+    "fs": "0.0.1-security",
+    "google-tts-api": "0.0.4",
+    "minimist": "^1.2.5",
+    "node-cmd": "^3.0.0",
+    "node-nlp": "^4.3.0",
+    "open": "^7.0.3",
+    "os": "^0.1.1",
+    "pug": "^2.0.4",
+    "socket.io": "^2.3.0",
+    "socket.io-client": "^2.3.0",
+    "sqlite3": "^4.1.1",
+    "vm": "^0.1.0",
+    "wav": "^1.0.2"
+  }
+}

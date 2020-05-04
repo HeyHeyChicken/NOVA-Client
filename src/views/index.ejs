@@ -1,0 +1,100 @@
+<html xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
+  <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="icon" type="image/png" href="/img/favicon.png" />
+      <title>CLIENT</title>
+      <!-- CSS-->
+      <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto&amp;display=swap" />
+      <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
+      <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css" />
+      <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css" />
+      <link rel="stylesheet" href="./css/style.min.css" />
+  </head>
+  <body>
+    <div id="app">
+        <b-tabs align="left">
+            <b-tab>
+                <template v-slot:title>
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </template>
+                <div class="container" id="tab-dashboard">
+                    <div class="row">
+                    </div>
+                </div>
+            </b-tab>
+            <b-tab>
+                <template v-slot:title>
+                    <i class="far fa-comment-alt"></i>
+                    <span>Chat</span>
+                </template>
+                <div class="container" id="tab-chat">
+                    <div class="row">
+                        <div class="col col-lg-8">
+                            <div class="card">
+                                <div class="card-body" id="message_body">
+                                  <div v-for="message in messages" class="row" v-bind:class="[message.FromServer ? 'justify-content-start' : 'justify-content-end']">
+                                    <div class="col col-8">
+                                      <div class="message">
+                                        <span>{{ message.Content }}</span>
+                                        <div class="date">{{ getMessageDate(message.ID) }}</div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="card-footer">
+                                    <form autocomplete="off" class="input-group" @submit="sendMessage" action="cs_message">
+                                      <input v-model="input" class="form-control" type="text" name="message" placeholder="Type your message..." />
+                                        <div class="input-group-append">
+                                          <button class="btn btn-secondary" type="submit">
+                                            <i class="far fa-paper-plane"></i>
+                                          </button>
+                                          <button @click="startSTT" class="btn btn-secondary" type="button">
+                                            <i class="far fa-microphone"></i>
+                                          </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col col-lg-4">
+                            <div class="card">
+                                <div class="card-header">What can I ask?</div>
+                                <div class="card-body">
+                                    <ul>
+                                        <li>"What's the weather like?"</li>
+                                        <li>"Show me camera image in the kitchen"</li>
+                                        <li>"What's the temperature in the kitchen?"</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </b-tab>
+            <template v-slot:tabs-end>
+                <li role="presentation" class="nav-item">
+                    <a role="tab"  target="_blank" aria-selected="true" aria-setsize="1" aria-posinset="1"  v-bind:href="server.url" class="nav-link">
+                        <i class="fas fa-server"></i>
+                        <span>Server</span>
+                    </a>
+                </li>
+            </template>
+        </b-tabs>
+        <span id="serverState" v-if="server.state" class="badge badge-success">Connected</span>
+        <span id="serverState" v-if="!server.state" class="badge badge-danger">Disconnected</span>
+    </div>
+    </div>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="//unpkg.com/vue@latest/dist/vue.js"></script>
+    <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.js"></script>
+    <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue-icons.min.js"></script>
+    <script src="/js/lib/socket.io/socket.io.js"></script>
+    <script src="/js/lib/bootstrap/bootstrap.min.js"></script>
+    <script src="/js/lib/fontawesome/all.min.js"></script>
+    <script src="/js/Volume.js"></script>
+    <script src="/js/Main.js"></script>
+    <script src="/js/index.js"></script>
+  </body>
+</html>
