@@ -84,7 +84,7 @@ class Main {
     this.InitialiseSocketServer();
     this.HTTP.listen(SELF.Settings.WebServerPort, function(){
       SELF.Log("The client is listening you.", "green");
-      SELF.Log("You can access the GUI on http://localhost:" + SELF.Settings.WebServerPort + ".", "green");
+      SELF.Log("You can access the client's GUI on http://localhost:" + SELF.Settings.WebServerPort + ".", "green");
     });
   }
 
