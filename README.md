@@ -6,7 +6,7 @@
     **NOVA - Client** is the client for your favorite voice assistant.<br>
 </div>
 
-<br>
+<br> 
 
 <div align="center">
     <a href="//nova-assistant.com">
