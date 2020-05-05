@@ -3,7 +3,7 @@
         <img src="https://github.com/HeyHeyChicken/NOVA-Client/blob/master/resources/github-logo.svg" alt="NOVA" width="300">
     </a>
     <br>
-    **NOVA - Client** is the client for your favorite voice assistant.<br>
+    NOVA - Client is the client for your favorite voice assistant.<br>
 </div>
 
 <br>
