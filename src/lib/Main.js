@@ -83,8 +83,8 @@ class Main {
     this.InitialiseSocketClient();
     this.InitialiseSocketServer();
     this.HTTP.listen(SELF.Settings.WebServerPort, function(){
-      SELF.Log(true, "The client is listening you.");
-      SELF.Log(true, "You can access the GUI on http://localhost:" + SELF.Settings.WebServerPort + ".");
+      SELF.Log("The client is listening you.", "green");
+      SELF.Log("You can access the GUI on http://localhost:" + SELF.Settings.WebServerPort + ".", "green");
     });
   }
 
@@ -98,7 +98,7 @@ class Main {
     this.IOClient.on("connect", function(){
       SELF.IOClient.emit("add_client", SELF.Settings.ClientID);
       SELF.ServerState = true;
-      SELF.Log(true, "You are connected to the NOVA server.");
+      SELF.Log("You are connected to the NOVA server.", "green");
       if(SELF.IOServer.sockets !== undefined){
         SELF.IOServer.sockets.emit("server_state", SELF.ServerState, SELF.Settings.ServerURL);
       }
@@ -107,7 +107,7 @@ class Main {
     // Lorsque le serveur du client se déconnecte au serveur central.
     this.IOClient.on("disconnect", function(){
       SELF.ServerState = false;
-      SELF.Log(false, "You are disconnected to the NOVA server.");
+      SELF.Log("You are disconnected to the NOVA server.", "red");
       if(SELF.IOServer.sockets !== undefined){
         SELF.IOServer.sockets.emit("server_state", SELF.ServerState, SELF.Settings.ServerURL);
       }
@@ -244,14 +244,14 @@ class Main {
     if(SELF.WaitingForHotWord === false){
       if(LIBRARIES.FS.existsSync(PY_PATH)){
         SELF.IOServer.sockets.emit("stop_stt");
-        SELF.Log(true, "Waiting for hot word ...");
+        SELF.Log("Waiting for hot word ...", "green");
         SELF.WaitingForHotWord = true;
         LIBRARIES.NodeCMD.get(
           "python " + PY_PATH + " ./python/jarvis.pmdl",
           function(err, data, stderr){
             SELF.WaitingForHotWord = false;
             if (!err) {
-              SELF.Log(true, "Hot word detected !");
+              SELF.Log("Hot word detected !", "green");
               SELF.IOServer.sockets.emit("start_stt");
             } else {
               console.log("error", err)
