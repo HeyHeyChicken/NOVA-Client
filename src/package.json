@@ -2,7 +2,7 @@
   "name": "nova-client",
   "version": "1.0.0",
   "description": "This is the NOVA client.",
-  "main": "index.js",
+  "main": "../index.js",
   "author": "Antoine Duval",
   "license": "SEE LICENSE IN LICENSE FILE",
   "dependencies": {

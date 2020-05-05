@@ -15,9 +15,10 @@ const LIBRARIES = {
 };
 
 class Client {
-  constructor() {
+  constructor(_launcher) {
     const SELF = this;
 
+    this.Launcher = _launcher;
     this.Settings = JSON.parse(LIBRARIES.FS.readFileSync("./settings.json", "utf8"));
     this.ServerState = false;
     this.Express = null;
