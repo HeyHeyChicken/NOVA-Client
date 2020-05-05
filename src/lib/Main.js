@@ -4,7 +4,6 @@ const LIBRARIES = {
   SocketIOServer: require("socket.io"),
   SocketIOClient: require("socket.io-client"),
   FS: require("fs"),
-  Colors: require("colors"),
   OS: require("os"),
   NodeCMD: require("node-cmd"),
   SQLite3: require("sqlite3").verbose(),
