@@ -18,8 +18,9 @@ class Main {
   constructor(_dirname, _launcher) {
     const SELF = this;
 
+    this.DirName = _dirname;
     this.Launcher = _launcher;
-    this.Settings = JSON.parse(LIBRARIES.FS.readFileSync(_dirname + "/settings.json", "utf8"));
+    this.Settings = JSON.parse(LIBRARIES.FS.readFileSync(this.DirName + "/settings.json", "utf8"));
     this.ServerState = false;
     this.Express = null;
     this.HTTP = null;
@@ -74,7 +75,7 @@ class Main {
 
     this.Express = LIBRARIES.Express(); // On initialise Express.
     this.Express.set("view engine", "ejs"); // On utilise le moteur de rendu "Pug" pour nos vues.
-    this.Express.set("views", "./views");
+    this.Express.set("views", SELF.DirName + "/views");
     this.Express.use("/", LIBRARIES.Express.static("./public")); // On défini un dossier public.
     this.Express.get("/", function(req, res){
       res.render("index");
