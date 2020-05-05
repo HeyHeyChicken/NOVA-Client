@@ -14,12 +14,12 @@ const LIBRARIES = {
   Message: require("./Message")
 };
 
-class Client {
-  constructor(_launcher) {
+class Main {
+  constructor(_dirname, _launcher) {
     const SELF = this;
 
     this.Launcher = _launcher;
-    this.Settings = JSON.parse(LIBRARIES.FS.readFileSync("./settings.json", "utf8"));
+    this.Settings = JSON.parse(LIBRARIES.FS.readFileSync(_dirname + "/settings.json", "utf8"));
     this.ServerState = false;
     this.Express = null;
     this.HTTP = null;
@@ -33,7 +33,7 @@ class Client {
 
     if(this.Settings.ClientID === null){
       this.Settings.ClientID = new Date().getTime();
-      LIBRARIES.FS.writeFileSync("./settings.json", JSON.stringify(this.Settings, null, 4), "utf8");
+      LIBRARIES.FS.writeFileSync(_dirname + "/settings.json", JSON.stringify(this.Settings, null, 4), "utf8");
     }
 
     this.InitialiseDataBase();
@@ -269,4 +269,4 @@ class Client {
   }
 }
 
-module.exports = Client;
+module.exports = Main;
