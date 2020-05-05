@@ -76,7 +76,7 @@ class Main {
     this.Express = LIBRARIES.Express(); // On initialise Express.
     this.Express.set("view engine", "ejs"); // On utilise le moteur de rendu "Pug" pour nos vues.
     this.Express.set("views", SELF.DirName + "/views");
-    this.Express.use("/", LIBRARIES.Express.static("./public")); // On défini un dossier public.
+    this.Express.use("/", LIBRARIES.Express.static(SELF.DirName + "/public")); // On défini un dossier public.
     this.Express.get("/", function(req, res){
       res.render("index");
     });
