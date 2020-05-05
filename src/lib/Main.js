@@ -59,7 +59,7 @@ class Main {
   InitialiseDataBase(){
     const SELF = this;
 
-    const DATA_BASE_FILE_NAME = "./sqlite.db";
+    const DATA_BASE_FILE_NAME = this.DirName + "/sqlite.db";
     const BOOL = !LIBRARIES.FS.existsSync(DATA_BASE_FILE_NAME);
     SELF.DataBase = new LIBRARIES.SQLite3.Database(DATA_BASE_FILE_NAME);
     if (BOOL) {
