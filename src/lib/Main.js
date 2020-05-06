@@ -295,10 +295,11 @@ class Main {
 
   // Cette fonction remplace le "console.log"
   Log(_text, _color = "white", _header = "NOVA CLIENT"){
-    if(this.Launcher !== undefined){
-      this.Launcher.Log(_text, _color, _header);
+    if(this.LauncherIO.connected === true){
+      this.LauncherIO.emit("log", _text, _color, _header);
     }
     else{
+      this.LauncherMessages.push([_text, _color, _header]);
       console.log(_text);
     }
   }
