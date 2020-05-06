@@ -17,6 +17,10 @@ class Main {
   constructor(_dirname, _launcher) {
     const SELF = this;
 
+    this.LauncherIO = null; // Ce serveur socket relie le serveur à son launcher.
+    this.LauncherMessages = []; // Cette liste contiendra les messages non envoyés au launcher.
+    this.InitialiseLauncherSocketClient();
+
     this.DirName = _dirname;
     this.Launcher = _launcher;
     this.Settings = JSON.parse(LIBRARIES.FS.readFileSync(this.DirName + "/settings.json", "utf8"));
@@ -52,6 +56,29 @@ class Main {
   	}
     console.log(command);
   	LIBRARIES.ChildProcess.exec(command);
+  }
+
+  // Cette fonction initialise la conection socket avec le launcher.
+  InitialiseLauncherSocketClient(){
+    const SELF = this;
+
+    SELF.LauncherIO = LIBRARIES.SocketIOClient("http://localhost:8082"); // Ce serveur socket relie le serveur à son launcher.
+
+    // Lorsque le serveur arrive à se connecter au launcher
+    SELF.LauncherIO.on("connect", function(){
+      if(SELF.LauncherMessages.length > 0){
+        for(let i = 0; i < SELF.LauncherMessages.length; i++){
+          SELF.LauncherIO.emit("log", SELF.LauncherMessages[i][0], SELF.LauncherMessages[i][1], SELF.LauncherMessages[i][2]);
+        }
+        SELF.LauncherMessages = [];
+      }
+    });
+
+    // Lorsque le launcher demande au serveur de redémarrer.
+    SELF.LauncherIO.on("reboot", function(){
+      SELF.IOServer.sockets.emit("reboot");
+      process.exit(1);
+    });
   }
 
   // Cette fonction initialise la base de donnée et créée les tables si besoin.
@@ -163,6 +190,11 @@ class Main {
           });
         });
       }
+    });
+
+    // SI le serveur demande aux clients de redémarrer.
+    this.IOClient.on("reboot", function(){
+      SELF.LauncherIO.emit("reboot_client");
     });
   }
 

@@ -14,7 +14,8 @@ class Main {
                 },
                 messages: [],
                 input: "",
-                language: null
+                language: null,
+                Rebooting: false
             },
             updated() {
                 SELF.ScrollDown();
@@ -104,6 +105,13 @@ class Main {
         /* ### SOCKET ########################################################################################### */
         /* ###################################################################################################### */
 
+        // Si la connection socket avec le serveur est réussie.
+        this.Socket.on("connect", function() {
+            if(SELF.App.Rebooting === true){
+                document.location.reload(true);
+            }
+        });
+
         // Ce message informe de l'état de connection avec le serveur.
         this.Socket.on("server_state", function(_state, _url) {
             SELF.App.server.state = _state;
@@ -159,6 +167,11 @@ class Main {
         // Le serveur central demande au client d'ouvrir une URL.
         this.Socket.on("open", function(_url) {
             window.open(_url);
+        });
+
+        // Le serveur central demande au client d'ouvrir une URL.
+        this.Socket.on("reboot", function() {
+            SELF.App.Rebooting = true;
         });
 
         this.Socket.on("disconnect", function() {
