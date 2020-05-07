@@ -8,7 +8,7 @@ const LIBRARIES = {
   NodeCMD: require("node-cmd"),
   SQLite3: require("sqlite3").verbose(),
   VM: require("vm2"),
-  RequireFromURL: require("requireFromUrl"),
+  RequireFromURL: require("require-from-url"),
 
   Message: require("./Message")
 };
