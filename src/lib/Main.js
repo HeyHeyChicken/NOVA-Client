@@ -173,7 +173,7 @@ class Main {
                   _main: SELF
                 },
                 require: {
-                  context: "sandbox",
+                  context: "host",
                   external: true
                 },
                 console: "inherit",
