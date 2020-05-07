@@ -8,6 +8,7 @@ const LIBRARIES = {
   NodeCMD: require("node-cmd"),
   SQLite3: require("sqlite3").verbose(),
   VM: require("vm2"),
+  RequireFromURL: require("requireFromUrl"),
 
   Message: require("./Message")
 };
@@ -160,6 +161,9 @@ class Main {
 
       // On charge les codes à executer côté serveur.
       for(let skill in _files){
+        var skillClient = LIBRARIES.RequireFromURL(SELF.Settings.ServerURL + "/" + skill + "/client.js");
+        new skillClient(SELF);
+        /*
         LIBRARIES.HTTP.get(SELF.Settings.ServerURL + "/" + skill + "/client.js",
         function(res) {
           let code = "";
@@ -183,6 +187,7 @@ class Main {
             }
           });
         });
+        */
       }
     });
 
