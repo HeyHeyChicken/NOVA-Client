@@ -176,13 +176,8 @@ class Main {
                   context: "sandbox",
                   external: true
                 },
-                console: "inherit"
-
-
-
-
-
-                ///requireNative:   [ 'path', 'fs', 'util', 'tty', 'module' ],
+                console: "inherit",
+                requireNative: [ 'child_process' ],
               });
               VM.run(code);
             }
