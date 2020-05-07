@@ -107,8 +107,8 @@ class Main {
 
         // Si la connection socket avec le serveur est réussie.
         this.Socket.on("connect", function() {
-            if(APP.AlreadyConnected === false){
-                APP.AlreadyConnected = true;
+            if(SELF.App.AlreadyConnected === false){
+                SELF.App.AlreadyConnected = true;
             }
             else{
                 document.location.reload(true);
