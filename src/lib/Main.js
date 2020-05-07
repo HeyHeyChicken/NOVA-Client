@@ -176,9 +176,7 @@ class Main {
                   external: true
                 }
               });
-              VM.run(code, LIBRARIES.VM.createContext({
-                _main: SELF
-              }));
+              VM.run(code);
             }
           });
         });
