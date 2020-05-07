@@ -7,8 +7,7 @@ const LIBRARIES = {
   OS: require("os"),
   NodeCMD: require("node-cmd"),
   SQLite3: require("sqlite3").verbose(),
-  ChildProcess: require("child_process"),
-  VM: require("vm"),
+  VM: require("vm2"),
 
   Message: require("./Message")
 };
@@ -42,20 +41,6 @@ class Main {
 
     this.InitialiseDataBase();
     this.InitialiseServers();
-    //this.LaunchChrome();
-  }
-
-  // Cette fonction permet de lancer automatiquement Google Chrome sur l'URL du client.
-  LaunchChrome(hide = false) {
-    const SELF = this;
-
-  	let command = this.Settings.ChromeExecutablePath + " http://localhost:" + this.Settings.WebServerPort;
-  	command += " --remote-debugging-port=9222 --autoplay-policy=no-user-gesture-required";
-  	if(hide === true){
-  		command += " --window-size=0,0";
-  	}
-    console.log(command);
-  	LIBRARIES.ChildProcess.exec(command);
   }
 
   // Cette fonction initialise la conection socket avec le launcher.
@@ -183,7 +168,15 @@ class Main {
           })
           res.on("end", () => {
             if(res.statusCode === 200){
-              LIBRARIES.VM.runInContext(code, LIBRARIES.VM.createContext({
+              const VM = new LIBRARIES.VM.NodeVM({
+                sandbox: {
+                  _main: SELF
+                },
+                require: {
+                  external: true
+                }
+              });
+              VM.run(code, LIBRARIES.VM.createContext({
                 _main: SELF
               }));
             }
