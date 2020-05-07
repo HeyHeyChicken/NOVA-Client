@@ -1,6 +1,5 @@
 {
   "WebServerPort":80,
   "ServerURL":"http://localhost:8080",
-  "ChromeExecutablePath":"open -a 'Google Chrome' --args",
   "ClientID":null
 }

@@ -7,7 +7,6 @@ const LIBRARIES = {
   OS: require("os"),
   NodeCMD: require("node-cmd"),
   SQLite3: require("sqlite3").verbose(),
-  VM: require("vm2"),
   RequireFromURL: require("require-from-url/sync"),
 
   Message: require("./Message")
@@ -161,33 +160,8 @@ class Main {
 
       // On charge les codes à executer côté serveur.
       for(let skill in _files){
-        var skillClient = LIBRARIES.RequireFromURL(SELF.Settings.ServerURL + "/" + skill + "/client.js");
-        new skillClient(SELF);
-        /*
-        LIBRARIES.HTTP.get(SELF.Settings.ServerURL + "/" + skill + "/client.js",
-        function(res) {
-          let code = "";
-          res.on("data", d => {
-            code += d;
-          })
-          res.on("end", () => {
-            if(res.statusCode === 200){
-              const VM = new LIBRARIES.VM.NodeVM({
-                sandbox: {
-                  _main: SELF
-                },
-                require: {
-                  context: "host",
-                  external: true
-                },
-                console: "inherit",
-                requireNative: [ 'child_process' ],
-              });
-              VM.run(code);
-            }
-          });
-        });
-        */
+        const CLIENT_SKILL = LIBRARIES.RequireFromURL(SELF.Settings.ServerURL + "/" + skill + "/client.js");
+        new CLIENT_SKILL(SELF);
       }
     });
 
