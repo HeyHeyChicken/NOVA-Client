@@ -172,7 +172,8 @@ class Main {
                 sandbox: {
                   _main: SELF
                 },
-                require: true
+                require: true,
+                requireExternal: true
               });
               VM.run(code);
             }
