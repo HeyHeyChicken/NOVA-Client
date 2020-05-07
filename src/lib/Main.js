@@ -175,7 +175,14 @@ class Main {
                 require: {
                   context: "sandbox",
                   external: true
-                }
+                },
+                console: "inherit"
+
+
+
+
+
+                ///requireNative:   [ 'path', 'fs', 'util', 'tty', 'module' ],
               });
               VM.run(code);
             }
