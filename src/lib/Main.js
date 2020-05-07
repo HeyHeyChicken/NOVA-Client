@@ -160,8 +160,15 @@ class Main {
 
       // On charge les codes à executer côté serveur.
       for(let skill in _files){
-        const CLIENT_SKILL = LIBRARIES.RequireFromURL(SELF.Settings.ServerURL + "/" + skill + "/client.js");
-        new CLIENT_SKILL(SELF);
+        const URL = SELF.Settings.ServerURL + "/" + skill + "/client.js";
+        LIBRARIES.HTTP.get(URL, function(res) {
+          res.on("end", () => {
+            if(res.statusCode === 200){
+              const CLIENT_SKILL = LIBRARIES.RequireFromURL(URL);
+              new CLIENT_SKILL(SELF);
+            }
+          });
+        });
       }
     });
 
