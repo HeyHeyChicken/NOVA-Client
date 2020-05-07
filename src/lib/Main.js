@@ -61,7 +61,6 @@ class Main {
 
     // Lorsque le launcher demande au serveur de redémarrer.
     SELF.LauncherIO.on("reboot", function(){
-      SELF.IOServer.sockets.emit("reboot");
       process.exit(1);
     });
   }

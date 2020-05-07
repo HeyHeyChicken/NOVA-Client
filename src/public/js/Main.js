@@ -15,7 +15,7 @@ class Main {
                 messages: [],
                 input: "",
                 language: null,
-                Rebooting: false
+                AlreadyConnected: false
             },
             updated() {
                 SELF.ScrollDown();
@@ -107,7 +107,10 @@ class Main {
 
         // Si la connection socket avec le serveur est réussie.
         this.Socket.on("connect", function() {
-            if(SELF.App.Rebooting === true){
+            if(APP.AlreadyConnected === false){
+                APP.AlreadyConnected = true;
+            }
+            else{
                 document.location.reload(true);
             }
         });
@@ -167,11 +170,6 @@ class Main {
         // Le serveur central demande au client d'ouvrir une URL.
         this.Socket.on("open", function(_url) {
             window.open(_url);
-        });
-
-        // Le serveur central demande au client d'ouvrir une URL.
-        this.Socket.on("reboot", function() {
-            SELF.App.Rebooting = true;
         });
 
         this.Socket.on("disconnect", function() {
