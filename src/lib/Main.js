@@ -9,7 +9,8 @@ const LIBRARIES = {
   SQLite3: require("sqlite3").verbose(),
   RequireFromURL: require("require-from-url/sync"),
 
-  Message: require("./Message")
+  Message: require("./Message"),
+  _FS: require("./FS")
 };
 
 class Main {
@@ -32,6 +33,7 @@ class Main {
     this.WaitingForHotWord = false;
     this.DataBase = null;
     this.Language = null;
+    this.HotWord = null;
     this.ClientSkillsPublic = {}; // Cet objet va contenir l'arbre des fichiers provenant des skills destinés à la GUI des clients.
 
     if(this.Settings.ClientID === null){
@@ -146,6 +148,14 @@ class Main {
       SELF.IOServer.emit("open", _url);
     });
 
+    // Lorsque le serveur central renseigne le mot d'appel.
+    this.IOClient.on("set_hot_word", function(_hotWord) {
+      SELF.HotWord = _hotWord;
+      LIBRARIES._FS.downloadFile(SELF.Settings.ServerURL + "/hot_words/" + SELF.HotWord + ".pmdl", SELF.DirName + "/python/HotWord.pmdl", SELF, function () {
+        SELF.WaitWakeWord();
+      })
+    });
+
     // Lorsque le serveur central change la langue.
     this.IOClient.on("set_language", function(_language) {
       SELF.Language = _language;
@@ -227,6 +237,13 @@ class Main {
 
 
 
+
+
+
+
+
+
+
       // Si l'utilisateur commence a parler et que le serveur doit initialiser son enregistreur de son.
       socket.on("start_recording", function(_data){
         socket.emit("start_stt");
@@ -249,25 +266,34 @@ class Main {
   WaitWakeWord(){
     const SELF = this;
 
-    const PY_PATH = "./python/" + LIBRARIES.OS.type() + "/demo.py";
+    if(SELF.HotWord !== null){
+      const FOLDER = SELF.DirName + "/python/" + process.platform;
+      if (LIBRARIES.FS.existsSync(FOLDER)) {
+        const PY_PATH = FOLDER + "/demo.py";
 
-    if(SELF.WaitingForHotWord === false){
-      if(LIBRARIES.FS.existsSync(PY_PATH)){
-        SELF.IOServer.sockets.emit("stop_stt");
-        SELF.Log("Waiting for hot word ...", "green");
-        SELF.WaitingForHotWord = true;
-        LIBRARIES.NodeCMD.get(
-          "python " + PY_PATH + " ./python/" + SELF.Settings.HotWord + ".pmdl",
-          function(err, data, stderr){
-            SELF.WaitingForHotWord = false;
-            if (!err) {
-              SELF.Log("Hot word detected !", "green");
-              SELF.IOServer.sockets.emit("start_stt");
-            } else {
-              console.log("error", err)
-            }
+        if(SELF.WaitingForHotWord === false){
+          if(LIBRARIES.FS.existsSync(PY_PATH)){
+            SELF.IOServer.sockets.emit("stop_stt");
+            SELF.Log("Waiting for hot word ...", "green");
+            SELF.WaitingForHotWord = true;
+            LIBRARIES.NodeCMD.get(
+                "python " + PY_PATH + " " + SELF.DirName + "/python/HotWord.pmdl",
+                function(err, data, stderr){
+                  SELF.WaitingForHotWord = false;
+                  if (!err) {
+                    SELF.Log("Hot word detected !", "green");
+                    SELF.IOServer.sockets.emit("start_stt");
+                  } else {
+                    SELF.Log("An error occurred with the SnowBoy's hotword recognition.", "red");
+                    console.log("error", err);
+                  }
+                }
+            );
           }
-        );
+        }
+      }
+      else{
+        SELF.Log("Your operating system does not seem to be supported by the SnowBoy hotword detection.", "red");
       }
     }
   }
