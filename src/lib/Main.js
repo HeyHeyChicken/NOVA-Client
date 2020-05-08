@@ -257,7 +257,7 @@ class Main {
         SELF.Log("Waiting for hot word ...", "green");
         SELF.WaitingForHotWord = true;
         LIBRARIES.NodeCMD.get(
-          "python " + PY_PATH + " ./python/jarvis.pmdl",
+          "python " + PY_PATH + " ./python/" + SELF.Settings.HotWord + ".pmdl",
           function(err, data, stderr){
             SELF.WaitingForHotWord = false;
             if (!err) {

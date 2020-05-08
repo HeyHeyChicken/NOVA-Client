@@ -1,5 +1,6 @@
 {
   "WebServerPort":80,
   "ServerURL":"http://localhost:8080",
-  "ClientID":null
+  "ClientID":null,
+  "HotWord": "Jarvis"
 }
