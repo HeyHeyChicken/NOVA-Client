@@ -27,7 +27,7 @@ class Message {
   static SelectAll(_main){
     Message._PrepareFile(_main);
 
-    return JSON.parse(LIBRARIES.FS.readFileSync(Client._GetPath(_main), "utf8"));
+    return JSON.parse(LIBRARIES.FS.readFileSync(Message._GetPath(_main), "utf8"));
   }
 
   /* ######################################################################################## */
