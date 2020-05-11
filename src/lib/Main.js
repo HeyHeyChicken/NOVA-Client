@@ -5,10 +5,9 @@ const LIBRARIES = {
   SocketIOClient: require("socket.io-client"),
   FS: require("fs"),
   NodeCMD: require("node-cmd"),
-  SQLite3: require("sqlite3").verbose(),
   RequireFromURL: require("require-from-url/sync"),
 
-  Message: require("./Message"),
+  Message: require("./DB/Message"),
   _FS: require("./FS")
 };
 
@@ -30,7 +29,6 @@ class Main {
     this.IOClient = null;
     this.IOServerClients = {};
     this.WaitingForHotWord = false;
-    this.DataBase = null;
     this.Language = null;
     this.HotWord = null;
     this.ClientSkillsPublic = {}; // Cet objet va contenir l'arbre des fichiers provenant des skills destinés à la GUI des clients.
@@ -40,7 +38,6 @@ class Main {
       LIBRARIES.FS.writeFileSync(_dirname + "/settings.json", JSON.stringify(this.Settings, null, 4), "utf8");
     }
 
-    this.InitialiseDataBase();
     this.InitialiseServers();
   }
 
@@ -64,20 +61,6 @@ class Main {
     SELF.LauncherIO.on("reboot", function(){
       process.exit(1);
     });
-  }
-
-  // Cette fonction initialise la base de donnée et créée les tables si besoin.
-  InitialiseDataBase(){
-    const SELF = this;
-
-    const DATA_BASE_FILE_NAME = this.DirName + "/sqlite.db";
-    const BOOL = !LIBRARIES.FS.existsSync(DATA_BASE_FILE_NAME);
-    SELF.DataBase = new LIBRARIES.SQLite3.Database(DATA_BASE_FILE_NAME);
-    if (BOOL) {
-      SELF.DataBase.serialize(function() {
-        SELF.DataBase.run("CREATE TABLE Messages (ID INT, Content TEXT, Date TEXT, FromServer INT)");
-      });
-    }
   }
 
   // Cette fonction initialise le serveur web du client NOVA.
@@ -126,7 +109,7 @@ class Main {
 
     // Lorsque le serveur central envoie un message au client.
     this.IOClient.on("sc_message", function(_message){
-      const SC_MESSAGE = new LIBRARIES.Message(_message.Content, _message.FromServer, _message.Date).Insert(SELF.DataBase);
+      const SC_MESSAGE = new LIBRARIES.Message(_message.Content, _message.FromServer, _message.Date).Insert(SELF);
       if(SELF.IOServer.sockets !== undefined){
         SELF.IOServer.sockets.emit("sc_message", SC_MESSAGE);
       }
@@ -205,17 +188,13 @@ class Main {
       socket.emit("server_state", SELF.ServerState, SELF.Settings.ServerURL);
 
       // On récupère les anciens messages pour les afficher à l'utilisateur.
-      SELF.DataBase.all("SELECT * FROM Messages", [], (err, rows) => {
-        if (err) {
-          throw err;
-        }
-        socket.emit("set_messages", rows);
-      });
+
+      socket.emit("set_messages", LIBRARIES.Message.SelectAll(SELF));
 
       // Lorsque l'utilisateur envoie un message au serveur, on lui redirige.
       socket.on("cs_message", function(_message){
         _message = _message.charAt(0).toUpperCase() + _message.slice(1);
-        const CS_MESSAGE = new LIBRARIES.Message(_message, false).Insert(SELF.DataBase);
+        const CS_MESSAGE = new LIBRARIES.Message(_message, false).Insert(SELF);
         SELF.IOServer.sockets.emit("cs_message", CS_MESSAGE);
         SELF.IOClient.emit("cs_message", CS_MESSAGE);
       });
