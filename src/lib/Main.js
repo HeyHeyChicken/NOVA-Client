@@ -271,7 +271,7 @@ class Main {
         }
       }
       else{
-        SELF.Log("Your operating system does not seem to be supported by the SnowBoy hotword detection.", "red");
+        SELF.Log("Your operating system (" + process.platform + ") does not seem to be supported by the SnowBoy hotword detection.", "red");
       }
     }
   }

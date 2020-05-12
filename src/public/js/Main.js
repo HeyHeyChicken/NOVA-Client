@@ -162,7 +162,7 @@ class Main {
             }
         });
 
-        // ???
+        // On informe la GUI des fichiers des skills à charger.
         this.Socket.on("set_skills_public_files", function(_files) {
             SELF.App.skillsPublicFiles = _files;
         });
