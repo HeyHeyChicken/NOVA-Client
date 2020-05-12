@@ -272,7 +272,7 @@ class Main {
                     SELF.Log("Hot word detected !", "green");
                     SELF.IOServer.sockets.emit("start_stt");
                   } else {
-                    SELF.Log("An error occurred with the SnowBoy's hotword recognition.", "red");
+                    SELF.Log("An error occurred with the SnowBoy's hotword recognition (" + process.platform + ").", "red");
                     console.log("error", err);
                   }
                 }
