@@ -167,6 +167,11 @@ class HotwordDetector(object):
                 message += time.strftime("%Y-%m-%d %H:%M:%S",
                                          time.localtime(time.time()))
                 logger.info(message)
+                return
+                """
+                CETTE LIGNE A ETE AJOUTEE PAR ANTOINE DUVAL
+                """
+
                 callback = detected_callback[ans-1]
                 if callback is not None:
                     callback()

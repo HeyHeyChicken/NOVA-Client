@@ -166,10 +166,10 @@ class HotwordDetector(object):
                                          time.localtime(time.time()))
                 logger.info(message)
 
-                print(message);
+                print(message)
                 return
                 """
-                CES LIGNE A ETE AJOUTEE PAR ANTOINE DUVAL
+                CETTE LIGNE A ETE AJOUTEE PAR ANTOINE DUVAL
                 """
 
                 callback = detected_callback[ans-1]
