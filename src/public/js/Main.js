@@ -171,10 +171,6 @@ class Main {
         this.Socket.on("open", function(_url) {
             window.open(_url);
         });
-
-        this.Socket.on("disconnect", function() {
-            window.close();
-        });
     }
 
     /* ###################################################################################################### */
