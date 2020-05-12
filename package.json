@@ -15,6 +15,7 @@
   "homepage": "https://github.com/HeyHeyChicken/NOVA-Client#readme",
   "dependencies": {
     "child_process": "^1.0.2",
+    "detect-rpi": "^1.4.0",
     "ejs": "^3.1.2",
     "express": "^4.17.1",
     "fs": "0.0.1-security",

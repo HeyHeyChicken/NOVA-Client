@@ -6,6 +6,7 @@ const LIBRARIES = {
   FS: require("fs"),
   NodeCMD: require("node-cmd"),
   RequireFromURL: require("require-from-url/sync"),
+  DetectRPI: require("detect-rpi"),
 
   Message: require("./DB/Message"),
   _FS: require("./FS")
@@ -245,7 +246,13 @@ class Main {
     const SELF = this;
 
     if(SELF.HotWord !== null){
-      const FOLDER = SELF.DirName + "/python/" + process.platform;
+      let os = process.platform;
+      if(LIBRARIES.DetectRPI()){
+        os = "raspbian";
+      }
+
+      const FOLDER = SELF.DirName + "/python/" + os;
+
       if (LIBRARIES.FS.existsSync(FOLDER)) {
         const PY_PATH = FOLDER + "/demo.py";
 
@@ -256,7 +263,7 @@ class Main {
             SELF.WaitingForHotWord = true;
 
             let python = null;
-            switch(process.platform){
+            switch(os){
               case "linux":
                 python = "python3";
                 break;
@@ -272,8 +279,7 @@ class Main {
                     SELF.Log("Hot word detected !", "green");
                     SELF.IOServer.sockets.emit("start_stt");
                   } else {
-                    console.log(process);
-                    SELF.Log("An error occurred with the SnowBoy's hotword recognition (" + process.platform + ").", "red");
+                    SELF.Log("An error occurred with the SnowBoy's hotword recognition (" + os + ").", "red");
                     console.log("error", err);
                   }
                 }
@@ -282,7 +288,7 @@ class Main {
         }
       }
       else{
-        SELF.Log("Your operating system (" + process.platform + ") does not seem to be supported by the SnowBoy hotword detection.", "red");
+        SELF.Log("Your operating system (" + os + ") does not seem to be supported by the SnowBoy hotword detection.", "red");
       }
     }
   }
