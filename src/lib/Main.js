@@ -254,8 +254,18 @@ class Main {
             SELF.IOServer.sockets.emit("stop_stt");
             SELF.Log("Waiting for hot word ...", "green");
             SELF.WaitingForHotWord = true;
+
+            let python = null;
+            switch(process.platform){
+              case "linux":
+                python = "python3";
+                break;
+              default:
+                python = "python";
+                break;
+            }
             LIBRARIES.NodeCMD.get(
-                "python " + PY_PATH + " " + SELF.DirName + "/python/HotWord.pmdl",
+                python + " " + PY_PATH + " " + SELF.DirName + "/python/HotWord.pmdl",
                 function(err, data, stderr){
                   SELF.WaitingForHotWord = false;
                   if (!err) {
