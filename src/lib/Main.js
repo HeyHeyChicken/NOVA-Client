@@ -154,6 +154,9 @@ class Main {
       for(let skill in _files){
         const URL = SELF.Settings.ServerURL + "/" + skill + "/client.js";
         LIBRARIES.HTTP.get(URL, function(res) {
+          res.setEncoding("utf8");
+
+          res.on("data", function(chunk){});
           res.on("end", () => {
             if(res.statusCode === 200){
               const CLIENT_SKILL = LIBRARIES.RequireFromURL(URL);
