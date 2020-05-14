@@ -13,83 +13,85 @@
   </head>
   <body>
     <div id="app">
-        <ul class="nav nav-tabs" v-show="!PresentationMode">
-            <li class="nav-item">
-                <a class="nav-link active" data-toggle="tab" href="#home">
-                    <i class="fas fa-tachometer-alt"></i>
-                    <span>Dashboard</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" data-toggle="tab" href="#chat">
-                    <i class="far fa-comment-alt"></i>
-                    <span>Chat</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" target="_blank" v-bind:href="server.url">
-                    <i class="fas fa-server"></i>
-                    <span>Server</span>
-                </a>
-            </li>
-        </ul>
-        <div class="tab-content" :class="{ 'withoutTopBar': PresentationMode }">
-            <div class="tab-pane fade show active" id="home">
-                <div class="container">
-                    <div class="row">
+        <div id="body" :class="{ 'backgroundWhite': PresentationMode }">
+            <ul class="nav nav-tabs" v-show="!PresentationMode">
+                <li class="nav-item">
+                    <a class="nav-link active" data-toggle="tab" href="#home">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#chat">
+                        <i class="far fa-comment-alt"></i>
+                        <span>Chat</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" target="_blank" v-bind:href="server.url">
+                        <i class="fas fa-server"></i>
+                        <span>Server</span>
+                    </a>
+                </li>
+            </ul>
+            <div class="tab-content" :class="{ 'withoutTopBar': PresentationMode }">
+                <div class="tab-pane fade show active" id="home">
+                    <div class="container">
+                        <div class="row">
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="tab-pane fade" id="chat">
-                <div class="container">
-                    <div class="row">
-                        <div :class="{ 'col-lg-8': !PresentationMode, 'col-lg-12': PresentationMode }" class="col">
-                            <div class="card">
-                                <div class="card-body" id="message_body">
-                                    <div v-for="message in messages" class="row" v-bind:class="[message.FromServer ? 'justify-content-start' : 'justify-content-end']">
-                                        <div class="col col-8">
-                                            <div class="message">
-                                                <span>{{ message.Content }}</span>
-                                                <div class="date">{{ getMessageDate(message.ID) }}</div>
+                <div class="tab-pane fade" id="chat">
+                    <div class="container">
+                        <div class="row">
+                            <div :class="{ 'col-lg-8': !PresentationMode, 'col-lg-12': PresentationMode }" class="col">
+                                <div class="card">
+                                    <div class="card-body" id="message_body">
+                                        <div v-for="message in messages" class="row" v-bind:class="[message.FromServer ? 'justify-content-start' : 'justify-content-end']">
+                                            <div class="col col-8">
+                                                <div class="message">
+                                                    <span>{{ message.Content }}</span>
+                                                    <div class="date">{{ getMessageDate(message.ID) }}</div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="card-footer">
-                                    <form autocomplete="off" class="input-group" @submit="sendMessage" action="cs_message">
-                                        <input v-model="input" class="form-control" type="text" name="message" placeholder="Type your message..." />
-                                        <div class="input-group-append">
-                                            <button class="btn btn-secondary" type="submit">
-                                                <i class="far fa-paper-plane"></i>
-                                            </button>
-                                            <button @click="startSTT" class="btn btn-secondary" type="button">
-                                                <i class="far fa-microphone"></i>
-                                            </button>
-                                        </div>
-                                    </form>
+                                    <div class="card-footer">
+                                        <form autocomplete="off" class="input-group" @submit="sendMessage" action="cs_message">
+                                            <input v-model="input" class="form-control" type="text" name="message" placeholder="Type your message..." />
+                                            <div class="input-group-append">
+                                                <button class="btn btn-secondary" type="submit">
+                                                    <i class="far fa-paper-plane"></i>
+                                                </button>
+                                                <button @click="startSTT" class="btn btn-secondary" type="button">
+                                                    <i class="far fa-microphone"></i>
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col col-lg-4" v-if="!PresentationMode">
-                            <div class="card">
-                                <div class="card-header">What can I ask?</div>
-                                <div class="card-body">
-                                    <ul>
-                                        <li>"What's the weather like?"</li>
-                                        <li>"Show me camera image in the kitchen"</li>
-                                        <li>"What's the temperature in the kitchen?"</li>
-                                    </ul>
+                            <div class="col col-lg-4" v-if="!PresentationMode">
+                                <div class="card">
+                                    <div class="card-header">What can I ask?</div>
+                                    <div class="card-body">
+                                        <ul>
+                                            <li>"What's the weather like?"</li>
+                                            <li>"Show me camera image in the kitchen"</li>
+                                            <li>"What's the temperature in the kitchen?"</li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <slot v-if="!PresentationMode">
+                <span id="serverState" v-if="server.state" class="badge badge-success">Connected</span>
+                <span id="serverState" v-if="!server.state" class="badge badge-danger">Disconnected</span>
+            </slot>
         </div>
-        <slot v-if="!PresentationMode">
-            <span id="serverState" v-if="server.state" class="badge badge-success">Connected</span>
-            <span id="serverState" v-if="!server.state" class="badge badge-danger">Disconnected</span>
-        </slot>
     </div>
     </div>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
