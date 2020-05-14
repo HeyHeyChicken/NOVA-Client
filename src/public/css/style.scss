@@ -19,286 +19,232 @@ html{
         transform: translateY(-50%);
       }
 
-      > .tabs{
-        height: 100%;
+      > .nav{
+        background-color: white;
+        border-bottom: 1px solid $border_color;
+        height: $nav_height;
+        box-sizing: content-box;
+        padding: 0px 18px;
 
-        > div{
-          > .nav{
-            background-color: white;
-            border-bottom: 1px solid $border_color;
+        > li{
+          height: $nav_height;
+          padding: 0px 12px;
+
+          > a{
             height: $nav_height;
-            box-sizing: content-box;
-            margin-bottom: 0px!important;
-            padding: 0px 18px;
+            line-height: $nav_height;
+            padding: 0px;
+            cursor: pointer;
+            border-radius: 0px;
+            border: none;
+            text-decoration: none;
 
-            > .nav-item{
-              height: $nav_height;
-              padding: 0px 12px;
+            &:focus{
+              outline: 0;
+            }
 
-              > .nav-link{
-                height: $nav_height;
-                line-height: $nav_height;
-                padding: 0px;
-                cursor: pointer;
-                border-radius: 0px;
-                border: none;
-                pointer-events: inherit;
+            &.active{
+              background-color: transparent;
+              color: #467fcf;
+            }
 
-                &:focus{
-                  outline: 0;
-                }
+            &:not(.active){
+              color: #9aa0ac;
+            }
 
-                &.active{
-                  background-color: transparent;
-                  color: #467fcf;
-                }
+            > svg{
+              font-size: 14px;
+            }
 
-                &:not(.active){
-                  color: #9aa0ac;
-                }
+            > span{
+              font-size: 15px;
+            }
+          }
+        }
+      }
 
-                > svg{
-                  font-size: 14px;
-                }
+      > .tab-content{
+        height: calc(100% - #{$nav_height} - 1px);
+        padding: 15px;
+        overflow: auto;
 
-                > span{
-                  font-size: 15px;
+        &.withoutTopBar{
+          height: 100%;
+
+          > .tab-pane{
+            &#chat{
+              > .container{
+                > .row{
+                  > .col{
+                    &:first-child{
+                      > .card{
+                        width: 690px;
+                        height: 372px;
+                      }
+                    }
+                  }
                 }
               }
             }
           }
         }
 
-        > .tab-content{
-          height: calc(100% - #{$nav_height} - 1px);
-          padding: 15px;
-          overflow: auto;
+        > .tab-pane{
+          min-height: 100%;
 
-          > .tab-pane{
-            min-height: 100%;
-
+          &#chat{
             > .container{
               > .row{
-                > .col{
-                  padding-top: 15px;
-                  padding-bottom: 15px;
+              height: 100%;
 
+              > .col{
+                &:first-child{
                   > .card{
-                    border-color: $border_color;
+                    height: calc(100% - 15px * 2);
 
-                    > .card-header, > .card-footer{
-                      background-color: transparent;
-                      border-color: $border_color;
-                    }
+                    > .card-body{
+                      overflow: auto;
 
-                    > .card-footer{
-                      padding: 15px;
-
-                      > .input-group{
-                        margin-bottom: 0px;
-
-                        > input{
-                          border: none;
-                          border-radius: 100px;
-                          background-color: #F2F2F2;
-                          font-size: 14px;
-                          margin-right: 15px;
-
-                          &:focus{
-                            box-shadow: none;
-                          }
-                        }
-
-                        > .input-group-append{
-                          > button{
-                            border-radius: 50%;
-                            color: $message_color;
-                            background-color: transparent;
-                            border-color: $border_color;
-                            width: 35px;
-                            padding: 0px;
-                            text-align: center;
-
-                            &:not(:last-child){
-                              margin-right: 15px;
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-
-              &#tab-chat{
-                > .row{
-                  height: 100%;
-
-                  > .col{
-                    &:first-child{
-                      > .card{
-                        height: calc(100% - 15px * 2);
-
-                        > .card-body{
-                          overflow: auto;
-
-                          > .row{
-                            &.justify-content-end{
-                              > .col{
-                                > .message{
-                                  background-color: $message_color;
-                                  color: white;
-                                  float: right;
-
-                                  > .date{
-                                    right: calc(100% + 15px);
-
-                                    &:after{
-                                      left: 100%;
-                                      border-width: 5px 0 5px 8.7px;
-                                      border-color: transparent transparent transparent $message_date_color;
-                                    }
-                                  }
-                                }
-                              }
-                            }
-
-                            &.justify-content-start{
-                              > .col{
-                                > .message{
-                                  background-color: #f1f0f0;
-                                  color: black;
-                                  float: left;
-
-                                  > .date{
-                                    left: calc(100% + 15px);
-
-                                    &:after{
-                                      right: 100%;
-                                      border-width: 5px 8.7px 5px 0;
-                                      border-color: transparent $message_date_color transparent transparent;
-                                    }
-                                  }
-                                }
-                              }
-                            }
-
-                            > .col{
-                              > .message{
-                                padding: 6px 12px;
-                                border-radius: 20px;
-                                position: relative;
-
-                                > .date{
-                                  position: absolute;
-                                  background-color: $message_date_color;
-                                  color: white;
-                                  padding: 6px 8px;
-                                  border-radius: 2px;
-                                  line-height: 16px;
-                                  font-size: 12px;
-                                  top: 50%;
-                                  transform: translateY(-50%);
-                                  clear: both;
-                                  display: inline-block;
-                                  white-space: nowrap;
-
-                                  &:after{
-                                    content: "";
-                                    position: absolute;
-                                    top:: 50%;
-                                    transform: translateY(-50%);
-                                    width: 0;
-                                    height: 0;
-                                    border-style: solid;
-                                  }
-                                }
-
-                                &:not(:hover){
-                                  > .date{
-                                    display: none;
-                                  }
-                                }
-                              }
-
-                              &:not(:last-child){
-                                margin-bottom: 15px;
-                              }
-                            }
-
-                            &:not(:last-child){
-                              margin-bottom: 15px;
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-
-              &#tab-skills{
-                > .row{
-                  display: flex;
-                  flex-wrap: wrap;
-
-                  > .col {
-                    display: flex;
-                    flex-direction: column;
-
-                    > .card{
-                      height: 100%;
-                      cursor: pointer;
-                      overflow: hidden;
-
-                      > .card-header{
-                        padding: 0px;
-                        position: relative;
-
-                        > .icon, > .wallpaper{
-                          background-color: white;
-                          background-position: center center;
-                          background-size: cover;
-                        }
-
-                        > .icon{
-                          border-radius: 0.25rem;
-                          height: 60px;
-                          width: 60px;
-                          border: 1px solid $border_color;
-                          position: absolute;
-                          left: 15px;
-                          top: 100%;
-                          transform: translateY(-50%);
-                        }
-
-                        > .wallpaper{
-                          width: 100%;
-                          padding-top: 56%;
-                        }
-                      }
-
-                      > .card-body{
-                        padding: 15px;
-                        padding-left: 60px + 15px * 2;
-
-                        > .card-title{
-                          margin: 0px;
-                          font-size: 16px;
-                        }
-                      }
-
-                      > .card-footer{
-                        > .row{
+                      > .row{
+                        &.justify-content-end{
                           > .col{
-                            > a{
-                              width: 100%;
-                              display: block;
+                            > .message{
+                              background-color: $message_color;
+                              color: white;
+                              float: right;
 
-                              > button{
-                                width: 100%;
+                              > .date{
+                                right: calc(100% + 15px);
+
+                                &:after{
+                                  left: 100%;
+                                  border-width: 5px 0 5px 8.7px;
+                                  border-color: transparent transparent transparent $message_date_color;
+                                }
                               }
                             }
+                          }
+                        }
+
+                        &.justify-content-start{
+                          > .col{
+                            > .message{
+                              background-color: #f1f0f0;
+                              color: black;
+                              float: left;
+
+                              > .date{
+                                left: calc(100% + 15px);
+
+                                &:after{
+                                  right: 100%;
+                                  border-width: 5px 8.7px 5px 0;
+                                  border-color: transparent $message_date_color transparent transparent;
+                                }
+                              }
+                            }
+                          }
+                        }
+
+                        > .col{
+                          > .message{
+                            padding: 6px 12px;
+                            border-radius: 20px;
+                            position: relative;
+
+                            > .date{
+                              position: absolute;
+                              background-color: $message_date_color;
+                              color: white;
+                              padding: 6px 8px;
+                              border-radius: 2px;
+                              line-height: 16px;
+                              font-size: 12px;
+                              top: 50%;
+                              transform: translateY(-50%);
+                              clear: both;
+                              display: inline-block;
+                              white-space: nowrap;
+
+                              &:after{
+                                content: "";
+                                position: absolute;
+                                top: 50%;
+                                transform: translateY(-50%);
+                                width: 0;
+                                height: 0;
+                                border-style: solid;
+                              }
+                            }
+
+                            &:not(:hover){
+                              > .date{
+                                display: none;
+                              }
+                            }
+                          }
+
+                          &:not(:last-child){
+                            margin-bottom: 15px;
+                          }
+                        }
+
+                        &:not(:last-child){
+                          margin-bottom: 15px;
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+            }
+          }
+
+          > .container{
+            > .row{
+              > .col{
+                padding-top: 15px;
+                padding-bottom: 15px;
+
+                > .card{
+                  border-color: $border_color;
+
+                  > .card-header, > .card-footer{
+                    background-color: transparent;
+                    border-color: $border_color;
+                  }
+
+                  > .card-footer{
+                    padding: 15px;
+
+                    > .input-group{
+                      margin-bottom: 0px;
+
+                      > input{
+                        border: none;
+                        border-radius: 100px;
+                        background-color: #F2F2F2;
+                        font-size: 14px;
+                        margin-right: 15px;
+
+                        &:focus{
+                          box-shadow: none;
+                        }
+                      }
+
+                      > .input-group-append{
+                        > button{
+                          border-radius: 50%;
+                          color: $message_color;
+                          background-color: transparent;
+                          border-color: $border_color;
+                          width: 35px;
+                          padding: 0px;
+                          text-align: center;
+
+                          &:not(:last-child){
+                            margin-right: 15px;
                           }
                         }
                       }

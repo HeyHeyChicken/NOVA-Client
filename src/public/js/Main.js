@@ -6,7 +6,15 @@ class Main {
         this.Volume = new Volume(100);
         this.App = new Vue({
             el: "#app",
+            created() {
+                window.addEventListener("keydown", (e) => {
+                    if (e.code === "F1") {
+                        SELF.App.PresentationMode = !SELF.App.PresentationMode;
+                    }
+                });
+            },
             data: {
+                PresentationMode: false,
                 skillsPublicFiles: {},
                 server: {
                     state: false,
