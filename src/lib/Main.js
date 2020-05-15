@@ -72,7 +72,7 @@ class Main {
     this.Express.set("view engine", "ejs"); // On utilise le moteur de rendu "Pug" pour nos vues.
     this.Express.set("views", SELF.DirName + "/views");
     this.Express.use("/", LIBRARIES.Express.static(SELF.DirName + "/public")); // On défini un dossier public.
-    this.Express.get("/", function(req, res){
+    this.Express.get(["/", "/index"], function(req, res){
       res.render("index");
     });
     this.HTTP = LIBRARIES.HTTP.createServer(this.Express);
@@ -88,6 +88,7 @@ class Main {
     const SELF = this;
 
     this.IOClient = LIBRARIES.SocketIOClient(this.Settings.ServerURL);
+
 
     // Lorsque le serveur du client se connecte au serveur central.
     this.IOClient.on("connect", function(){
@@ -127,8 +128,8 @@ class Main {
     });
 
     // Lorsque le serveur central demande au client d'ouvrir une URL.
-    this.IOClient.on("open", function(_url) {
-      SELF.IOServer.emit("open", _url);
+    this.IOClient.on("open", function(_url, _newWindow) {
+      SELF.IOServer.emit("open", _url, _newWindow);
     });
 
     // Lorsque le serveur central renseigne le mot d'appel.

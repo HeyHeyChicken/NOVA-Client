@@ -176,8 +176,13 @@ class Main {
         });
 
         // Le serveur central demande au client d'ouvrir une URL.
-        this.Socket.on("open", function(_url) {
-            window.open(_url);
+        this.Socket.on("open", function(_url, _newWindow) {
+            if(_newWindow === true){
+                window.open(_url, _newWindow);
+            }
+            else{
+                window.location = _url;
+            }
         });
     }
 
