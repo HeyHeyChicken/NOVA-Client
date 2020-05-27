@@ -2,3 +2,4 @@ node_modules/
 sqlite.db
 .idea/
 /src/python/*.pmdl
+/src/python/*.umdl

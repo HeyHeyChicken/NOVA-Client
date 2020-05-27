@@ -135,7 +135,18 @@ class Main {
     // Lorsque le serveur central renseigne le mot d'appel.
     this.IOClient.on("set_hot_word", function(_hotWord) {
       SELF.HotWord = _hotWord;
-      LIBRARIES._FS.downloadFile(SELF.Settings.ServerURL + "/hot_words/" + SELF.HotWord + ".pmdl", SELF.DirName + "/python/HotWord.pmdl", SELF, function () {
+      const PATH = SELF.DirName + "/python/";
+
+      // On supprime les anciens fichiers umdl et pmdl.
+      const FILES = LIBRARIES.FS.readdirSync(PATH);
+      for(let i = 0; i < FILES.length; i++){
+        if (!LIBRARIES.FS.lstatSync(PATH + FILES[i]).isDirectory()) {
+          LIBRARIES.FS.unlinkSync(PATH + FILES[i]);
+        }
+      }
+
+      // On télécharge le fichier umdl ou pmdl du serveur.
+      LIBRARIES._FS.downloadFile(SELF.Settings.ServerURL + "/hot_words/" + SELF.HotWord, PATH + SELF.HotWord, SELF, function () {
         SELF.WaitWakeWord();
       })
     });
@@ -276,14 +287,14 @@ class Main {
                 break;
             }
             LIBRARIES.NodeCMD.get(
-                python + " " + PY_PATH + " " + SELF.DirName + "/python/HotWord.pmdl",
+                python + " " + PY_PATH + " " + SELF.DirName + "/python/" + SELF.HotWord,
                 function(err, data, stderr){
                   SELF.WaitingForHotWord = false;
                   if (!err) {
                     SELF.Log("Hot word detected !", "green");
                     SELF.IOServer.sockets.emit("start_stt");
                   } else {
-                    SELF.Log("An error occurred with the SnowBoy's hotword recognition (" + os + ").", "red");
+                    SELF.Log("An error occurred with the SnowBoy's hotword recognition (OS : " + os + ", Model: " + SELF.HotWord + ").", "red");
                     console.log("error", err);
                   }
                 }
@@ -292,7 +303,7 @@ class Main {
         }
       }
       else{
-        SELF.Log("Your operating system (" + os + ") does not seem to be supported by the SnowBoy hotword detection.", "red");
+        SELF.Log("Your operating system (" + os + ") does not seem to be supported by the SnowBoy hotword detection (Model: " + SELF.HotWord + ").", "red");
       }
     }
   }
