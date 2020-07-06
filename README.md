@@ -31,4 +31,4 @@ If you would like to contribute to this project, make sure you first read the [g
 <br>
 <br>
 
-Created by [Antoine Duval (HeyHeyChicken)](//antoine.cuffel.fr) with ❤ and ☕ (chocolate) in [Déville-lès-Rouen](//en.wikipedia.org/wiki/Déville-lès-Rouen).
+Created by [Antoine Duval (HeyHeyChicken)](//antoine.cuffel.fr) with ❤ and ☕ (chocolate) in [Mesnil-Panneville](//en.wikipedia.org/wiki/Mesnil-Panneville).
