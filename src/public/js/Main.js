@@ -141,7 +141,7 @@ class Main {
 
         this.Socket.on("set_messages", function(_messages) {
             SELF.App.messages = _messages;
-            SELF.ScrollDown(); // Ca fonctionne pas ... Salim ?
+            SELF.ScrollDown();
         });
 
         this.Socket.on("play_audio", function(_audios) {
@@ -260,11 +260,11 @@ class Main {
     toggleRecording() {
         if (this.Recording === true) {
             // stop recording
-            //this.Recording = false;
+            this.Recording = false;
             this.Socket.emit("end_recording");
         } else {
             // start recording
-            //this.Recording = true;
+            this.Recording = true;
             this.Socket.emit("start_recording", {numChannels: 1, bps: 16, fps: parseInt(this.AudioContext.sampleRate)});
         }
     }
@@ -277,63 +277,6 @@ class Main {
         splitter.connect( merger, 0, 0 );
         splitter.connect( merger, 0, 1 );
         return merger;
-    }
-
-    cancelAnalyserUpdates() {
-        window.cancelAnimationFrame( rafID );
-        rafID = null;
-    }
-
-    updateAnalysers(time) {
-        if (!analyserContext) {
-            var canvas = document.getElementById("analyser");
-            canvasWidth = canvas.width;
-            canvasHeight = canvas.height;
-            analyserContext = canvas.getContext("2d");
-        }
-
-        // analyzer draw code here
-        {
-            var SPACING = 3;
-            var BAR_WIDTH = 1;
-            var numBars = Math.round(canvasWidth / SPACING);
-            var freqByteData = new Uint8Array(analyserNode.frequencyBinCount);
-
-            analyserNode.getByteFrequencyData(freqByteData);
-
-            analyserContext.clearRect(0, 0, canvasWidth, canvasHeight);
-            analyserContext.fillStyle = '#F6D565';
-            analyserContext.lineCap = 'round';
-            var multiplier = analyserNode.frequencyBinCount / numBars;
-
-            // Draw rectangle for each frequency bin.
-            for (var i = 0; i < numBars; ++i) {
-                var magnitude = 0;
-                var offset = Math.floor( i * multiplier );
-                // gotta sum/average the block, or we miss narrow-bandwidth spikes
-                for (var j = 0; j< multiplier; j++)
-                magnitude += freqByteData[offset + j];
-                magnitude = magnitude / multiplier;
-                var magnitude2 = freqByteData[i * multiplier];
-                analyserContext.fillStyle = "hsl( " + Math.round((i*360)/numBars) + ", 100%, 50%)";
-                analyserContext.fillRect(i * SPACING, canvasHeight, BAR_WIDTH, -magnitude);
-            }
-        }
-
-        rafID = window.requestAnimationFrame( updateAnalysers );
-    }
-
-    toggleMono() {
-        if (this.AudioInput != this.RealAudioInput) {
-            this.AudioInput.disconnect();
-            this.RealAudioInput.disconnect();
-            this.AudioInput = this.RealAudioInput;
-        } else {
-            this.RealAudioInput.disconnect();
-            this.AudioInput = this.convertToMono( this.RealAudioInput );
-        }
-
-        this.AudioInput.connect(this.InputPoint);
     }
 
     gotStream(stream) {
@@ -354,7 +297,7 @@ class Main {
         scriptNode.onaudioprocess = function (audioEvent) {
             if (MAIN.Recording) {
                 const input = audioEvent.inputBuffer.getChannelData(0);
-
+                console.log(input);
                 // convert float audio data to 16-bit PCM
                 var buffer = new ArrayBuffer(input.length * 2)
                 var output = new DataView(buffer);
@@ -367,12 +310,6 @@ class Main {
         }
         MAIN.InputPoint.connect(scriptNode);
         scriptNode.connect(MAIN.AudioContext.destination);
-
-        const zeroGain = MAIN.AudioContext.createGain();
-        zeroGain.gain.value = 0.0;
-        MAIN.InputPoint.connect( zeroGain );
-        zeroGain.connect( MAIN.AudioContext.destination );
-        //updateAnalysers();
     }
 
     InitAudio() {

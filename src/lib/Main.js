@@ -117,6 +117,13 @@ class Main {
       }
     });
 
+    this.IOClient.on("cs_message", function(_message){
+      const CS_MESSAGE = new LIBRARIES.Message(_message, false).Insert(SELF);
+      if(SELF.IOServer.sockets !== undefined){
+        SELF.IOServer.sockets.emit("cs_message", CS_MESSAGE);
+      }
+    });
+
     // Lorsque le serveur central envoie un son à jouer au client.
     this.IOClient.on("play_audio", function(_audios) {
       for(let index = 0; index < _audios.length; index++) {
@@ -134,6 +141,7 @@ class Main {
 
     // Lorsque le serveur central renseigne le mot d'appel.
     this.IOClient.on("set_hot_word", function(_hotWord) {
+      /*
       SELF.HotWord = _hotWord;
       const PATH = SELF.DirName + "/python/";
 
@@ -149,6 +157,7 @@ class Main {
       LIBRARIES._FS.downloadFile(SELF.Settings.ServerURL + "/hot_words/" + SELF.HotWord, PATH + SELF.HotWord, SELF, function () {
         SELF.WaitWakeWord();
       })
+      */
     });
 
     // Lorsque le serveur central change la langue.
