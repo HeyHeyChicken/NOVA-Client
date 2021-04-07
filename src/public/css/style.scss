@@ -107,6 +107,8 @@ html{
                   height: 100%;
 
                   > .col{
+                    max-height: 100%;
+
                     &:first-child{
                       > .card{
                         height: calc(100% - 15px * 2);

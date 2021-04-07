@@ -22,7 +22,7 @@ html body > #app > #body > #serverState {
 }
 html body > #app > #body > .nav {
   background-color: white;
-  border-bottom: 1px solid #E0E5EC;
+  border-bottom: 1px solid #e0e5ec;
   height: 54px;
   box-sizing: content-box;
   padding: 0px 18px;
@@ -73,6 +73,9 @@ html body > #app > #body > .tab-content > .tab-pane {
 }
 html body > #app > #body > .tab-content > .tab-pane#chat > .container > .row {
   height: 100%;
+}
+html body > #app > #body > .tab-content > .tab-pane#chat > .container > .row > .col {
+  max-height: 100%;
 }
 html body > #app > #body > .tab-content > .tab-pane#chat > .container > .row > .col:first-child > .card {
   height: calc(100% - 15px * 2);
@@ -148,11 +151,11 @@ html body > #app > #body > .tab-content > .tab-pane > .container > .row > .col {
   padding-bottom: 15px;
 }
 html body > #app > #body > .tab-content > .tab-pane > .container > .row > .col > .card {
-  border-color: #E0E5EC;
+  border-color: #e0e5ec;
 }
 html body > #app > #body > .tab-content > .tab-pane > .container > .row > .col > .card > .card-header, html body > #app > #body > .tab-content > .tab-pane > .container > .row > .col > .card > .card-footer {
   background-color: transparent;
-  border-color: #E0E5EC;
+  border-color: #e0e5ec;
 }
 html body > #app > #body > .tab-content > .tab-pane > .container > .row > .col > .card > .card-footer {
   padding: 15px;
@@ -163,7 +166,7 @@ html body > #app > #body > .tab-content > .tab-pane > .container > .row > .col >
 html body > #app > #body > .tab-content > .tab-pane > .container > .row > .col > .card > .card-footer > .input-group > input {
   border: none;
   border-radius: 100px;
-  background-color: #F2F2F2;
+  background-color: #f2f2f2;
   font-size: 14px;
   margin-right: 15px;
 }
@@ -174,7 +177,7 @@ html body > #app > #body > .tab-content > .tab-pane > .container > .row > .col >
   border-radius: 50%;
   color: #09f;
   background-color: transparent;
-  border-color: #E0E5EC;
+  border-color: #e0e5ec;
   width: 35px;
   padding: 0px;
   text-align: center;
@@ -182,5 +185,3 @@ html body > #app > #body > .tab-content > .tab-pane > .container > .row > .col >
 html body > #app > #body > .tab-content > .tab-pane > .container > .row > .col > .card > .card-footer > .input-group > .input-group-append > button:not(:last-child) {
   margin-right: 15px;
 }
-
-/*# sourceMappingURL=style.min.css.map */
