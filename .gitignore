@@ -3,3 +3,5 @@ sqlite.db
 .idea/
 /src/python/*.pmdl
 /src/python/*.umdl
+src/lib/DB/Message.json
+src/settings.json

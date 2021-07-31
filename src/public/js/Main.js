@@ -2,6 +2,11 @@ class Main {
     constructor() {
         const SELF = this;
 
+        this.RequestStartDate = null;
+        this.AverageDifferenceToCut = 40;
+        this.MaximumTimeOfARequest = 15 * 1000;
+        this.Volumes = [];
+        this.VolumeAverages = [];
         this.Socket = io();
         this.Volume = new Volume(100);
         this.App = new Vue({
@@ -108,6 +113,29 @@ class Main {
         this.AudioInput = null;
         this.Recording = false;
         this.InitAudio();
+
+        var t = setInterval(function(){
+          if(SELF.Volumes.length > 0){
+            if(Date.now() - MAIN.RequestStartDate > 1000){
+              var sum = 0;
+              for( var i = 0; i < SELF.Volumes.length; i++ ){
+                  sum += SELF.Volumes[i];
+              }
+
+              const AVERAGE = sum / SELF.Volumes.length;
+              SELF.VolumeAverages.push(AVERAGE);
+
+              const MAX = Math.max(...SELF.VolumeAverages);
+              const PERCENT = AVERAGE * 100 / MAX;
+              //console.log(AVERAGE, MAX, PERCENT);
+              if(PERCENT < SELF.AverageDifferenceToCut){
+                SELF.toggleRecording();
+              }
+
+              SELF.Volumes = [];
+            }
+          }
+        }, 1000);
 
         /* ###################################################################################################### */
         /* ### SOCKET ########################################################################################### */
@@ -260,10 +288,12 @@ class Main {
     toggleRecording() {
         if (this.Recording === true) {
             // stop recording
+            this.RequestStartDate = null;
             this.Recording = false;
             this.Socket.emit("end_recording");
         } else {
             // start recording
+            this.RequestStartDate = Date.now();
             this.Recording = true;
             this.Socket.emit("start_recording", {numChannels: 1, bps: 16, fps: parseInt(this.AudioContext.sampleRate)});
         }
@@ -293,11 +323,17 @@ class Main {
         analyserNode.fftSize = 2048;
         MAIN.InputPoint.connect( analyserNode );
 
+        setTimeout(function(){
+          if (MAIN.Recording === true) {
+            MAIN.toggleRecording();
+          }
+        }, MAIN.MaximumTimeOfARequest);
+
         var scriptNode = (MAIN.AudioContext.createScriptProcessor || MAIN.AudioContext.createJavaScriptNode).call(MAIN.AudioContext, 1024, 1, 1);
         scriptNode.onaudioprocess = function (audioEvent) {
             if (MAIN.Recording) {
                 const input = audioEvent.inputBuffer.getChannelData(0);
-                console.log(input);
+                // console.log(input);
                 // convert float audio data to 16-bit PCM
                 var buffer = new ArrayBuffer(input.length * 2)
                 var output = new DataView(buffer);
@@ -306,6 +342,16 @@ class Main {
                     output.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7FFF, true);
                 }
                 MAIN.Socket.emit("write_audio", buffer);
+
+                // Nous récupérons le volume du micro
+                var inputDataLength = input.length;
+                var total = 0;
+
+                for (var i = 0; i < inputDataLength; i++) {
+                    total += Math.abs(input[i++]);
+                }
+                var rms = (Math.sqrt(total / inputDataLength)) * 100;
+                MAIN.Volumes.push(rms);
             }
         }
         MAIN.InputPoint.connect(scriptNode);
