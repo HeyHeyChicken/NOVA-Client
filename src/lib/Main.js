@@ -1,6 +1,7 @@
 const LIBRARIES = {
   Express: require("express"),
   HTTP: require("http"),
+  Path: require("path"),
   SocketIOServer: require("socket.io"),
   SocketIOClient: require("socket.io-client"),
   FS: require("fs"),
