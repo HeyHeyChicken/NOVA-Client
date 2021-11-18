@@ -33,6 +33,7 @@ class Main {
     this.WaitingForHotWord = false;
     this.Language = null;
     this.HotWord = null;
+    this.Theme = "";
     this.ClientSkillsPublic = {}; // Cet objet va contenir l'arbre des fichiers provenant des skills destinés à la GUI des clients.
 
     if(this.Settings.ClientID === null){
@@ -90,7 +91,6 @@ class Main {
 
     this.IOClient = LIBRARIES.SocketIOClient(this.Settings.ServerURL);
 
-
     // Lorsque le serveur du client se connecte au serveur central.
     this.IOClient.on("connect", function(){
       SELF.IOClient.emit("add_client", SELF.Settings.ClientID);
@@ -138,6 +138,12 @@ class Main {
     // Lorsque le serveur central demande au client d'ouvrir une URL.
     this.IOClient.on("open", function(_url, _newWindow) {
       SELF.IOServer.emit("open", _url, _newWindow);
+    });
+
+    // Lorsque le serveur central renseigne le thème.
+    this.IOClient.on("set_theme", function(_theme) {
+      SELF.Theme = SELF.Settings.ServerURL + "/css/theme/" + _theme;
+      SELF.IOServer.emit("set_theme", SELF.Theme);
     });
 
     // Lorsque le serveur central renseigne le mot d'appel.
@@ -206,6 +212,9 @@ class Main {
 
       // On envoie la liste des fichiers public des skills
       SELF.IOServer.emit("set_language", SELF.Language);
+
+      // On envoie la thème
+      SELF.IOServer.emit("set_theme", SELF.Theme);
 
       // On envoie la liste des fichiers public des skills
       SELF.IOServer.emit("set_skills_public_files", SELF.ClientSkillsPublic);

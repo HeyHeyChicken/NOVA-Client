@@ -5,15 +5,14 @@ $message_date_color: #282828;
 
 html{
   body{
-    margin: 0px;
+    margin: 0;
     font-family: "Roboto", sans-serif;
 
     > #app{
       height: 100%;
       width: 100%;
 
-      > #body{
-        background-color: #f5f7fb;
+      > main{
         height: 100%;
         width: 100%;
 
@@ -33,18 +32,18 @@ html{
           border-bottom: 1px solid $border_color;
           height: $nav_height;
           box-sizing: content-box;
-          padding: 0px 18px;
+          padding: 0 18px;
 
           > li{
             height: $nav_height;
-            padding: 0px 12px;
+            padding: 0 12px;
 
             > a{
               height: $nav_height;
               line-height: $nav_height;
-              padding: 0px;
+              padding: 0;
               cursor: pointer;
-              border-radius: 0px;
+              border-radius: 0;
               border: none;
               text-decoration: none;
 
@@ -230,7 +229,7 @@ html{
                       padding: 15px;
 
                       > .input-group{
-                        margin-bottom: 0px;
+                        margin-bottom: 0;
 
                         > input{
                           border: none;
@@ -251,7 +250,8 @@ html{
                             background-color: transparent;
                             border-color: $border_color;
                             width: 35px;
-                            padding: 0px;
+                            height: 35px;
+                            padding: 0;
                             text-align: center;
 
                             &:not(:last-child){

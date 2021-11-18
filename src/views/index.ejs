@@ -9,11 +9,12 @@
       <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
       <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css" />
       <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css" />
-      <link rel="stylesheet" href="./css/style.min.css" />
+      <link rel="stylesheet" href="./css/style.css" />
   </head>
   <body>
     <div id="app">
-        <div id="body" :class="{ 'backgroundWhite': PresentationMode }">
+        <link rel="stylesheet" :href="theme" />
+        <main :class="{ 'backgroundWhite': PresentationMode }">
             <ul class="nav nav-tabs" v-show="!PresentationMode">
                 <li class="nav-item">
                     <a class="nav-link active" data-toggle="tab" href="#home">
@@ -91,7 +92,7 @@
                 <span id="serverState" v-if="server.state" class="badge badge-success">Connected</span>
                 <span id="serverState" v-if="!server.state" class="badge badge-danger">Disconnected</span>
             </slot>
-        </div>
+        </main>
     </div>
     </div>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>

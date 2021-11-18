@@ -25,6 +25,7 @@ class Main {
                     state: false,
                     url: null
                 },
+                theme: "",
                 messages: [],
                 input: "",
                 language: null,
@@ -174,6 +175,10 @@ class Main {
 
         this.Socket.on("play_audio", function(_audios) {
             SELF.PlayAudio(_audios[0].URL, _audios[0].PlaybackRate, _audios[0].Volume);
+        });
+
+        this.Socket.on("set_theme", function(_theme) {
+            SELF.App.theme = _theme;
         });
 
         this.Socket.on("set_language", function(_language) {
