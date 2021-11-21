@@ -28,6 +28,7 @@ class Main {
                 theme: "",
                 messages: [],
                 input: "",
+                DoneTutorial: null,
                 language: null,
                 AlreadyConnected: false
             },
@@ -161,6 +162,11 @@ class Main {
         this.Socket.on("cs_message", function(_message) {
             SELF.App.messages.push(_message);
             SELF.ScrollDown();
+        });
+
+        // Si le serveur envoie une mise à jour de l'état de completion du tuto
+        this.Socket.on("set_done_tutorial", function(_data) {
+            SELF.App.DoneTutorial = _data;
         });
 
         this.Socket.on("sc_message", function(_message) {

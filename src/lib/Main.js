@@ -34,6 +34,7 @@ class Main {
     this.Language = null;
     this.HotWord = null;
     this.Theme = "";
+    this.DoneTutorial = null;
     this.ClientSkillsPublic = {}; // Cet objet va contenir l'arbre des fichiers provenant des skills destinés à la GUI des clients.
 
     if(this.Settings.ClientID === null){
@@ -108,6 +109,11 @@ class Main {
       if(SELF.IOServer.sockets !== undefined){
         SELF.IOServer.sockets.emit("server_state", SELF.ServerState, SELF.Settings.ServerURL);
       }
+    });
+
+    // Si le serveur envoie une mise à jour de l'état de completion du tuto
+    this.IOClient.on("set_done_tutorial", function(_data) {
+      SELF.DoneTutorial = _data;
     });
 
     // Lorsque le serveur central envoie un message au client.
@@ -209,6 +215,9 @@ class Main {
     this.IOServer.on("connection", function(socket){
       const TOKEN = socket.client.conn.id;
       SELF.IOServerClients[TOKEN] = socket;
+
+      // On envoie l'état de completion du tuto
+      SELF.IOServer.emit("set_done_tutorial", SELF.DoneTutorial);
 
       // On envoie la liste des fichiers public des skills
       SELF.IOServer.emit("set_language", SELF.Language);
