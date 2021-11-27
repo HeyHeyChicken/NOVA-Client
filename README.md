@@ -1,7 +1,5 @@
 <div align="center">
-    <a href="//nova-assistant.com" rel="nofollow">
-        <img src="https://github.com/HeyHeyChicken/NOVA-Client/blob/master/resources/github-logo.svg" alt="NOVA" width="300">
-    </a>
+    <img src="https://github.com/HeyHeyChicken/NOVA/blob/master/resources/github-logo.svg" alt="NOVA" width="300">
     <br>
     NOVA - Client is the client for your favorite voice assistant.<br>
 </div>
