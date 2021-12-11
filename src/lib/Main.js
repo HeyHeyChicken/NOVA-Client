@@ -30,6 +30,7 @@ class Main {
     this.IOServer = null;
     this.IOClient = null;
     this.IOServerClients = {};
+    this.FunctionsToAddToIOServerClients = {};
     this.WaitingForHotWord = false;
     this.Language = null;
     this.HotWord = null;
@@ -215,6 +216,10 @@ class Main {
     this.IOServer.on("connection", function(socket){
       const TOKEN = socket.client.conn.id;
       SELF.IOServerClients[TOKEN] = socket;
+
+      for(var attribute in SELF.FunctionsToAddToIOServerClients){
+        socket.on(attribute, SELF.FunctionsToAddToIOServerClients[attribute]);
+      }
 
       // On envoie l'état de completion du tuto
       SELF.IOServer.emit("set_done_tutorial", SELF.DoneTutorial);
