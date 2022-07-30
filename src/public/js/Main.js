@@ -64,14 +64,21 @@ class Main {
                 startSTT: function() {
                     SELF.toggleRecording();
                 },
-                sendMessage: function (event) {
+                startSTTClick: function(){
+                  MAIN.App.startSTT();
+                },
+                sendMessage: function (event, action) {
+                  if(event !== undefined){
                     event.preventDefault();
-                    const MESSAGE = $(event.target).serializeArray().find(x => x.name === "message").value;
-                    if(MESSAGE.length > 0) {
-                        SELF.Socket.emit(event.target.getAttribute("action"), MESSAGE);
-                        event.target.reset();
-                        this.input = "";
+                    action = event.target.getAttribute("action");
+                  }
+                  if(this.input.length > 0) {
+                    SELF.Socket.emit(action, this.input);
+                    if(event !== undefined){
+                      event.target.reset();
                     }
+                    this.input = "";
+                  }
                 },
                 getMessageDate: function (_stringDate) {
                     const DATE = new Date(_stringDate);

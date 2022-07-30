@@ -270,6 +270,9 @@ class Main {
 
 
 
+      socket.on("fake_start_recording", function(_data){
+        socket.emit("start_stt");
+      });
 
       // Si l'utilisateur commence a parler et que le serveur doit initialiser son enregistreur de son.
       socket.on("start_recording", function(_data){
