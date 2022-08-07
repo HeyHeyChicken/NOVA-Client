@@ -19,6 +19,8 @@ class Main {
                 });
             },
             data: {
+                Dictionary: {},
+                settings: {},
                 PresentationMode: false,
                 skillsPublicFiles: {},
                 server: {
@@ -161,6 +163,11 @@ class Main {
         });
 
         // Ce message informe de l'état de connection avec le serveur.
+        this.Socket.on("set_settings", function(_settings) {
+            SELF.App.settings = _settings;
+        });
+
+        // Ce message informe de l'état de connection avec le serveur.
         this.Socket.on("server_state", function(_state, _url) {
             SELF.App.server.state = _state;
             SELF.App.server.url = _url;
@@ -174,6 +181,11 @@ class Main {
         // Si le serveur envoie une mise à jour de l'état de completion du tuto
         this.Socket.on("set_done_tutorial", function(_data) {
             SELF.App.DoneTutorial = _data;
+        });
+
+        // Si le serveur envoie les traductions
+        this.Socket.on("set_translation", function(_translation) {
+            SELF.App.Dictionary = _translation;
         });
 
         this.Socket.on("sc_message", function(_message) {

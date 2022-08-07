@@ -27,6 +27,7 @@ class Main {
     this.ServerState = false;
     this.Express = null;
     this.HTTP = null;
+    this.Translation = {};
     this.IOServer = null;
     this.IOClient = null;
     this.IOServerClients = {};
@@ -115,6 +116,11 @@ class Main {
     // Si le serveur envoie une mise à jour de l'état de completion du tuto
     this.IOClient.on("set_done_tutorial", function(_data) {
       SELF.DoneTutorial = _data;
+    });
+
+    // Si le serveur envoie une mise à jour de l'état de completion du tuto
+    this.IOClient.on("set_translation", function(_translation) {
+      SELF.Translation = _translation;
     });
 
     // Lorsque le serveur central envoie un message au client.
@@ -222,7 +228,12 @@ class Main {
       }
 
       // On envoie l'état de completion du tuto
+      SELF.IOServer.emit("set_settings", SELF.Settings);
+
+      // On envoie l'état de completion du tuto
       SELF.IOServer.emit("set_done_tutorial", SELF.DoneTutorial);
+
+      SELF.IOServer.emit("set_translation", SELF.Translation);
 
       // On envoie la liste des fichiers public des skills
       SELF.IOServer.emit("set_language", SELF.Language);
