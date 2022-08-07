@@ -23,7 +23,7 @@ class Main {
 
     this.DirName = _dirname;
     this.Launcher = _launcher;
-    this.Settings = JSON.parse(LIBRARIES.FS.readFileSync(this.DirName + "/settings.json", "utf8"));
+    this.Settings = JSON.parse(LIBRARIES.FS.readFileSync(LIBRARIES.Path.join(SELF.DirName, "settings.json")));
     this.ServerState = false;
     this.Express = null;
     this.HTTP = null;
@@ -257,6 +257,13 @@ class Main {
         const CS_MESSAGE = new LIBRARIES.Message(_message, false).Insert(SELF);
         SELF.IOServer.sockets.emit("cs_message", CS_MESSAGE);
         SELF.IOClient.emit("cs_message", CS_MESSAGE);
+      });
+
+      // Lorsque l'utilisateur modifie l'URL du serveur
+      socket.on("set_server_url", function(_url){
+        SELF.Settings.ServerURL = _url;
+        LIBRARIES.FS.writeFileSync(LIBRARIES.Path.join(SELF.DirName, "settings.json"), JSON.stringify(SELF.Settings, null, 4), "utf8");
+        SELF.LauncherIO.emit("reboot_client");
       });
 
       // Lorsque l'utilisateur fait une demande directe au serveur, on lui redirige.

@@ -66,6 +66,9 @@ class Main {
                 startSTT: function() {
                     SELF.toggleRecording();
                 },
+                serverURLChange: function() {
+                    SELF.Socket.emit("set_server_url", SELF.App.settings.ServerURL);
+                },
                 startSTTClick: function(){
                   MAIN.App.startSTT();
                 },
