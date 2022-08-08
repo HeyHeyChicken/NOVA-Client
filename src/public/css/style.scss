@@ -28,11 +28,11 @@ html{
         }
 
         > .nav{
+          padding: 0 18px;
           background-color: white;
           border-bottom: 1px solid $border_color;
           height: $nav_height;
           box-sizing: content-box;
-          padding: 0 18px;
 
           > li{
             height: $nav_height;
@@ -46,6 +46,10 @@ html{
               border-radius: 0;
               border: none;
               text-decoration: none;
+
+              > img{
+                width: 30px;
+              }
 
               &:focus{
                 outline: 0;
@@ -110,7 +114,7 @@ html{
 
                     &:first-child{
                       > .card{
-                        height: calc(100% - 15px * 2);
+                        height: 100%;
 
                         > .card-body{
                           overflow: auto;
@@ -122,6 +126,25 @@ html{
                                   background-color: $message_color;
                                   color: white;
                                   float: right;
+
+                                  &:before{
+                                    z-index: 0;
+                                    right: -8px;
+                                    height: 20px;
+                                    width: 20px;
+                                    background: $message_color;
+                                    background-attachment: fixed;
+                                    border-bottom-left-radius: 15px;
+                                  }
+
+                                  &:after{
+                                    z-index: 1;
+                                    right: -10px;
+                                    width: 10px;
+                                    height: 20px;
+                                    background: white;
+                                    border-bottom-left-radius: 10px;
+                                  }
 
                                   > .date{
                                     right: calc(100% + 15px);
@@ -143,6 +166,24 @@ html{
                                   color: black;
                                   float: left;
 
+                                  &:before{
+                                    z-index: 0;
+                                    left: -7px;
+                                    height: 20px;
+                                    width: 20px;
+                                    background: #eee;
+                                    border-bottom-right-radius: 15px;
+                                  }
+
+                                  &:after{
+                                    z-index: 1;
+                                    left: -10px;
+                                    width: 10px;
+                                    height: 20px;
+                                    background: white;
+                                    border-bottom-right-radius: 10px;
+                                  }
+
                                   > .date{
                                     left: calc(100% + 15px);
 
@@ -161,6 +202,13 @@ html{
                                 padding: 6px 12px;
                                 border-radius: 20px;
                                 position: relative;
+                                max-width: 100%;
+
+                                &:before, &:after{
+                                  content: "";
+                                  position: absolute;
+                                  bottom: 0;
+                                }
 
                                 > .date{
                                   position: absolute;
@@ -223,6 +271,18 @@ html{
                     > .card-header, > .card-footer{
                       background-color: transparent;
                       border-color: $border_color;
+                    }
+
+                    > .card-header{
+                      > img{
+                        width: 50px;
+                        border-radius: 50%;
+                        border: 1px solid $border_color;
+                      }
+
+                      > p{
+                        margin: 0px;
+                      }
                     }
 
                     > .card-footer{

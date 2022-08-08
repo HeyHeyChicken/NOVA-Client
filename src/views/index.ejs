@@ -17,7 +17,13 @@
         <main :class="{ 'backgroundWhite': PresentationMode }">
             <ul class="nav nav-tabs" v-show="!PresentationMode">
                 <li class="nav-item">
-                    <a class="nav-link active" data-toggle="tab" href="#home">
+                    <a class="nav-link" data-toggle="tab" @click="homeButtonClick">
+                        <img src="/img/favicon.png" />
+                        <span>NOVA</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a id="dashboardButton" class="nav-link active" data-toggle="tab" href="#home">
                         <i class="fas fa-tachometer-alt"></i>
                         <span>{{ Dictionary.dashboard }}</span>
                     </a>
@@ -39,9 +45,6 @@
                 <div class="tab-pane fade show active" id="home">
                     <div class="container">
                       <div class="row">
-                          <div class="col col-12">
-                              <h1>{{ Dictionary.dashboard }}</h1>
-                          </div>
                           <div class="col col-12 col-sm-12 col-md-6 col-lg-4">
                               <b-card class="client">
                                   <div class="input-group">
@@ -58,8 +61,12 @@
                 <div class="tab-pane fade" id="chat">
                     <div class="container">
                         <div class="row">
-                            <div :class="{ 'col-lg-8': !PresentationMode, 'col-lg-12': PresentationMode }" class="col">
+                            <div :class="{ 'col-xl-8 col-lg-8 col-md-8 col-sm-12 col-12': !PresentationMode, 'col-lg-12': PresentationMode }" class="col">
                                 <div class="card">
+                                    <div class="card-header text-center">
+                                      <img src="/img/favicon.png" />
+                                      <p>NOVA</p>
+                                    </div>
                                     <div class="card-body" id="message_body">
                                         <div v-for="message in messages" class="row" v-bind:class="[message.FromServer ? 'justify-content-start' : 'justify-content-end']">
                                             <div class="col col-8">
@@ -85,7 +92,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col col-lg-4" v-if="!PresentationMode">
+                            <div class="col col-lg-4 d-none d-md-block d-lg-block d-xl-block" v-if="!PresentationMode">
                                 <div class="card">
                                     <div class="card-header">{{ Dictionary.what_can_i_ask }}</div>
                                     <div class="card-body">

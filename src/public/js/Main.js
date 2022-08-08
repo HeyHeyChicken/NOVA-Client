@@ -63,6 +63,10 @@ class Main {
                 }
             },
             methods: {
+                homeButtonClick: function(event) {
+                    document.getElementById("dashboardButton").click();
+                    event.stopPropagation();
+                },
                 startSTT: function() {
                     SELF.toggleRecording();
                 },
