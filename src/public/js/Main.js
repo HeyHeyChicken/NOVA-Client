@@ -32,9 +32,11 @@ class Main {
                 input: "",
                 DoneTutorial: null,
                 language: null,
-                AlreadyConnected: false
+                AlreadyConnected: false,
+                firstUpdate: true
             },
             updated() {
+              if(this.firstUpdate){
                 SELF.ScrollDown();
 
                 // On ajoute les fichiers CSS et JS des skills.
@@ -61,6 +63,9 @@ class Main {
                         }
                     }
                 }
+
+                this.firstUpdate = false;
+              }
             },
             methods: {
                 homeButtonClick: function(event) {
@@ -132,6 +137,21 @@ class Main {
         this.Recording = false;
         this.InitAudio();
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         var t = setInterval(function(){
           if(SELF.Volumes.length > 0){
             if(Date.now() - MAIN.RequestStartDate > 1000){
@@ -145,7 +165,7 @@ class Main {
 
               const MAX = Math.max(...SELF.VolumeAverages);
               const PERCENT = AVERAGE * 100 / MAX;
-              //console.log(AVERAGE, MAX, PERCENT);
+              //console.log(PERCENT);
               if(PERCENT < SELF.AverageDifferenceToCut){
                 SELF.toggleRecording();
               }
@@ -289,39 +309,6 @@ class Main {
         }
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     toggleRecording() {
         if (this.Recording === true) {
             // stop recording
@@ -346,54 +333,14 @@ class Main {
         return merger;
     }
 
-    gotStream(stream) {
-      console.log("stream");
-        MAIN.InputPoint = MAIN.AudioContext.createGain();
-
-        // Create an AudioNode from the stream.
-        MAIN.RealAudioInput = MAIN.AudioContext.createMediaStreamSource(stream);
-        MAIN.AudioInput = MAIN.RealAudioInput;
-
-        MAIN.AudioInput = MAIN.convertToMono( MAIN.AudioInput );
-        MAIN.AudioInput.connect(MAIN.InputPoint);
-
-        var analyserNode = MAIN.AudioContext.createAnalyser();
-        analyserNode.fftSize = 2048;
-        MAIN.InputPoint.connect( analyserNode );
-
-        setTimeout(function(){
-          if (MAIN.Recording === true) {
-            MAIN.toggleRecording();
-          }
-        }, MAIN.MaximumTimeOfARequest);
-
-        var scriptNode = (MAIN.AudioContext.createScriptProcessor || MAIN.AudioContext.createJavaScriptNode).call(MAIN.AudioContext, 1024, 1, 1);
-        scriptNode.onaudioprocess = function (audioEvent) {
-            if (MAIN.Recording) {
-                const input = audioEvent.inputBuffer.getChannelData(0);
-                // console.log(input);
-                // convert float audio data to 16-bit PCM
-                var buffer = new ArrayBuffer(input.length * 2)
-                var output = new DataView(buffer);
-                for (var i = 0, offset = 0; i < input.length; i++, offset += 2) {
-                var s = Math.max(-1, Math.min(1, input[i]));
-                    output.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7FFF, true);
-                }
-                MAIN.Socket.emit("write_audio", buffer);
-
-                // Nous récupérons le volume du micro
-                var inputDataLength = input.length;
-                var total = 0;
-
-                for (var i = 0; i < inputDataLength; i++) {
-                    total += Math.abs(input[i++]);
-                }
-                var rms = (Math.sqrt(total / inputDataLength)) * 100;
-                MAIN.Volumes.push(rms);
-            }
-        }
-        MAIN.InputPoint.connect(scriptNode);
-        scriptNode.connect(MAIN.AudioContext.destination);
+    convertFloat32To1BitPCM(input){
+      let buffer = new ArrayBuffer(input.length * 2);
+      var output = new DataView(buffer);
+      for (var i = 0, offset = 0; i < input.length; i++, offset += 2) {
+        const S = Math.max(-1, Math.min(1, input[i]));
+        output.setInt16(offset, S < 0 ? S * 0x8000 : S * 0x7FFF, true);
+      }
+      return buffer;
     }
 
     InitAudio() {
@@ -404,9 +351,39 @@ class Main {
         if (!navigator.requestAnimationFrame)
             navigator.requestAnimationFrame = navigator.webkitRequestAnimationFrame || navigator.mozRequestAnimationFrame;
 
-        navigator.getUserMedia({audio: true}, this.gotStream, function(e) {
-            alert('Error getting audio');
-            console.log(e);
-        });
+            setTimeout(function(){
+              const context = new AudioContext();
+              navigator.mediaDevices.getUserMedia({
+                audio: true
+              }).then(function(microphone) {
+                const source = context.createMediaStreamSource(microphone);
+                context.audioWorklet.addModule("js/recorder.worklet.js").then(function() {
+                  const recorder = new AudioWorkletNode(
+                    context,
+                    "recorder.worklet"
+                  );
+
+                  source
+                    .connect(recorder)
+                    .connect(context.destination);
+
+                  recorder.port.onmessage = function(data) {
+                    if(MAIN.Recording){
+                      const CONVERTED = MAIN.convertFloat32To1BitPCM(data.data);
+                      MAIN.Socket.emit("write_audio", CONVERTED);
+
+                      var inputDataLength = data.data.length;
+                      var total = 0;
+                      for (var i = 0; i < inputDataLength; i++) {
+                          total += Math.abs(data.data[i++]);
+                      }
+                      var rms = (Math.sqrt(total / inputDataLength)) * 100;
+                      MAIN.Volumes.push(rms);
+                    }
+                    // `data` is a Float32Array array containing our audio samples
+                  }
+                });
+              });
+            }, 1000)
     }
 }
