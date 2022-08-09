@@ -371,6 +371,7 @@ class Main {
                     if(MAIN.Recording){
                       const CONVERTED = MAIN.convertFloat32To1BitPCM(data.data);
                       MAIN.Socket.emit("write_audio", CONVERTED);
+                      console.log("ss");
 
                       var inputDataLength = data.data.length;
                       var total = 0;
