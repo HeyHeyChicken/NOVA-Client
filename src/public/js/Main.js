@@ -367,11 +367,13 @@ class Main {
                     .connect(recorder)
                     .connect(context.destination);
 
+                  console.log("Debug -> Here");
                   recorder.port.onmessage = function(data) {
+                  console.log("Debug -> onmessage");
                     if(MAIN.Recording){
                       const CONVERTED = MAIN.convertFloat32To1BitPCM(data.data);
                       MAIN.Socket.emit("write_audio", CONVERTED);
-                      console.log("ss");
+                      console.log("Debug -> write_audio");
 
                       var inputDataLength = data.data.length;
                       var total = 0;
