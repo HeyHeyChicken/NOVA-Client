@@ -347,6 +347,7 @@ class Main {
     }
 
     gotStream(stream) {
+      console.log("stream");
         MAIN.InputPoint = MAIN.AudioContext.createGain();
 
         // Create an AudioNode from the stream.
