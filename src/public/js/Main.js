@@ -33,7 +33,8 @@ class Main {
                 DoneTutorial: null,
                 language: null,
                 AlreadyConnected: false,
-                firstUpdate: true
+                firstUpdate: true,
+                firstAudioInit: true
             },
             updated() {
               if(this.firstUpdate){
@@ -135,7 +136,6 @@ class Main {
         this.RealAudioInput = null;
         this.AudioInput = null;
         this.Recording = false;
-        this.InitAudio();
 
 
 
@@ -317,6 +317,7 @@ class Main {
             this.Socket.emit("end_recording");
         } else {
             // start recording
+            this.InitAudio();
             this.RequestStartDate = Date.now();
             this.Recording = true;
             this.Socket.emit("start_recording", {numChannels: 1, bps: 16, fps: parseInt(this.AudioContext.sampleRate)});
@@ -344,49 +345,43 @@ class Main {
     }
 
     InitAudio() {
-        if (!navigator.getUserMedia)
-            navigator.getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-        if (!navigator.cancelAnimationFrame)
-            navigator.cancelAnimationFrame = navigator.webkitCancelAnimationFrame || navigator.mozCancelAnimationFrame;
-        if (!navigator.requestAnimationFrame)
-            navigator.requestAnimationFrame = navigator.webkitRequestAnimationFrame || navigator.mozRequestAnimationFrame;
+      if(this.App.firstAudioInit){
+        this.App.firstAudioInit = false;
+        const context = new AudioContext();
+        navigator.mediaDevices.getUserMedia({
+          audio: true
+        }).then(function(microphone) {
+          const source = context.createMediaStreamSource(microphone);
+          context.audioWorklet.addModule("js/recorder.worklet.js").then(function() {
+            const recorder = new AudioWorkletNode(
+              context,
+              "recorder.worklet"
+            );
 
-            setTimeout(function(){
-              const context = new AudioContext();
-              navigator.mediaDevices.getUserMedia({
-                audio: true
-              }).then(function(microphone) {
-                const source = context.createMediaStreamSource(microphone);
-                context.audioWorklet.addModule("js/recorder.worklet.js").then(function() {
-                  const recorder = new AudioWorkletNode(
-                    context,
-                    "recorder.worklet"
-                  );
+            source
+              .connect(recorder)
+              .connect(context.destination);
 
-                  source
-                    .connect(recorder)
-                    .connect(context.destination);
+            console.log("Debug -> Here");
+            recorder.port.onmessage = function(data) {
+            console.log("Debug -> onmessage");
+              if(MAIN.Recording){
+                const CONVERTED = MAIN.convertFloat32To1BitPCM(data.data);
+                MAIN.Socket.emit("write_audio", CONVERTED);
+                console.log("Debug -> write_audio");
 
-                  console.log("Debug -> Here");
-                  recorder.port.onmessage = function(data) {
-                  console.log("Debug -> onmessage");
-                    if(MAIN.Recording){
-                      const CONVERTED = MAIN.convertFloat32To1BitPCM(data.data);
-                      MAIN.Socket.emit("write_audio", CONVERTED);
-                      console.log("Debug -> write_audio");
-
-                      var inputDataLength = data.data.length;
-                      var total = 0;
-                      for (var i = 0; i < inputDataLength; i++) {
-                          total += Math.abs(data.data[i++]);
-                      }
-                      var rms = (Math.sqrt(total / inputDataLength)) * 100;
-                      MAIN.Volumes.push(rms);
-                    }
-                    // `data` is a Float32Array array containing our audio samples
-                  }
-                });
-              });
-            }, 10000)
+                var inputDataLength = data.data.length;
+                var total = 0;
+                for (var i = 0; i < inputDataLength; i++) {
+                    total += Math.abs(data.data[i++]);
+                }
+                var rms = (Math.sqrt(total / inputDataLength)) * 100;
+                MAIN.Volumes.push(rms);
+              }
+              // `data` is a Float32Array array containing our audio samples
+            }
+          });
+        });
+      }
     }
 }
