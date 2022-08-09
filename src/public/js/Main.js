@@ -37,9 +37,9 @@ class Main {
                 firstAudioInit: true
             },
             updated() {
-              if(this.firstUpdate){
-                SELF.ScrollDown();
+              SELF.ScrollDown();
 
+              if(this.firstUpdate){
                 // On ajoute les fichiers CSS et JS des skills.
                 if(document.getElementsByClassName("dynamic_file").length === 0){
                     for(let skill in this.skillsPublicFiles){
