@@ -41,7 +41,7 @@ class Main {
 
               if(this.firstUpdate){
                 if(window.location.hostname.includes("gitpod.io")){
-                  console.log(SELF.App.settings);
+                  console.log(SELF.App.settings.ServerURL);
                   //SELF.Socket.emit("set_server_url", SELF.App.settings.ServerURL);
                 }
 
