@@ -40,6 +40,11 @@ class Main {
               SELF.ScrollDown();
 
               if(this.firstUpdate){
+                if(window.location.hostname.includes("gitpod.io")){
+                  console.log(SELF.App.settings);
+                  //SELF.Socket.emit("set_server_url", SELF.App.settings.ServerURL);
+                }
+
                 // On ajoute les fichiers CSS et JS des skills.
                 if(document.getElementsByClassName("dynamic_file").length === 0){
                     for(let skill in this.skillsPublicFiles){
