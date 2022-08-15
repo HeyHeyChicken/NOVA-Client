@@ -44,7 +44,7 @@ class Main {
                   if(!SELF.App.settings.ServerURL.includes("gitpod.io")){
                     const SPLITTER = "-";
                     const SPLIT = window.location.hostname.split(SPLITTER);
-                    SPLIT[0] = PORT;
+                    SPLIT[0] = "8080";
                     const URL = SPLIT.join(SPLITTER);
 
                     SELF.Socket.emit("set_server_url", URL);
