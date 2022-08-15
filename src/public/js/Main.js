@@ -40,18 +40,6 @@ class Main {
               SELF.ScrollDown();
 
               if(this.firstUpdate){
-                if(window.location.hostname.includes("gitpod.io")){
-                  if(!SELF.App.settings.ServerURL.includes("gitpod.io")){
-                    console.log(SELF.App.settings.ServerURL);
-                    const SPLITTER = "-";
-                    const SPLIT = window.location.hostname.split(SPLITTER);
-                    SPLIT[0] = "8080";
-                    const URL = SPLIT.join(SPLITTER);
-
-                    //SELF.Socket.emit("set_server_url", URL);
-                  }
-                }
-
                 // On ajoute les fichiers CSS et JS des skills.
                 if(document.getElementsByClassName("dynamic_file").length === 0){
                     for(let skill in this.skillsPublicFiles){
