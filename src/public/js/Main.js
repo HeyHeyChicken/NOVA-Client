@@ -286,8 +286,11 @@ class Main {
         SOUND.src = _url;
         if(_imperturbable === true) {
             SOUND.setAttribute("data-imperturbable", "");
+            parseInt(_volume) / 100;
         }
-        SOUND.volume = (parseInt(_volume) * _imperturbable === true ? 100 : (this.Volume.Value / 100)) / 100;
+        else{
+            SOUND.volume = (parseInt(_volume) * (this.Volume.Value / 100)) / 100;
+        }
         SOUND.setAttribute("data-volume", _volume);
         SOUND.playbackRate = _playbackRate;
         document.body.appendChild(SOUND);
