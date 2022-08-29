@@ -279,7 +279,7 @@ class Main {
         const SELF = this;
 
         if(this.Volume.Value < this.Volume.OldValue) {
-            this.Volume.Set(this.Volume.OldValue);
+            //this.Volume.Set(this.Volume.OldValue);
         }
         const SOUND = document.createElement("audio");
         SOUND.type = "audio/mpeg";

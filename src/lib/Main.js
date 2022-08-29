@@ -118,6 +118,11 @@ class Main {
       SELF.DoneTutorial = _data;
     });
 
+    // Si le serveur indique que le STT est fini
+    this.IOClient.on("stop_stt", function() {
+      SELF.IOServer.sockets.emit("stop_stt");
+    });
+
     // Si le serveur envoie une mise à jour de l'état de completion du tuto
     this.IOClient.on("set_translation", function(_translation) {
       SELF.Translation = _translation;
