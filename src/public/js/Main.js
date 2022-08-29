@@ -239,7 +239,7 @@ class Main {
 
         // Le serveur a détécté le mot clé, il est demandé au client d'activer le STT.
         this.Socket.on("start_stt", function() {
-            SELF.Volume.Set(10);
+            SELF.Volume.Set(5);
             if(SELF.STT !== undefined){
                 SELF.STT.Start();
             }
