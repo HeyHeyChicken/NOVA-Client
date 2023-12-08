@@ -8,19 +8,19 @@
 
 <div align="center">
     <a href="//nova-assistant.com">
-      <img style="border:1px solid black;" src="https://github.com/HeyHeyChicken/NOVA-Client/blob/master/resources/screenshot.jpg">
+      <img style="border:1px solid black;" src="https://github.com/HeyHeyChicken/NOVA-Client/blob/master/.github/screenshot.jpg">
     </a>
 </div>
 
-## Installation
+## ⬇️ Installation
 
 Follow the [installation guide](//github.com/HeyHeyChicken/NOVA#installation).
 
-## Usage
+## 🚀 Usage
 
 Follow the [usage guide](//github.com/HeyHeyChicken/NOVA#usage).
 
-## Support and contribution
+## 🫵 Support and contribution
 
 I provide support for all users through [GitHub issues](//github.com/HeyHeyChicken/NOVA-Client/issues).
 
