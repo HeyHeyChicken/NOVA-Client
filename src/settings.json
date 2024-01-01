@@ -1,5 +1,5 @@
 {
     "WebServerPort": 8083,
-    "ServerURL": "http://localhost:8081",
+    "ServerURL": "http://localhost:8080",
     "ClientID": 1659211295319
 }
