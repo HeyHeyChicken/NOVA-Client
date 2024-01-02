@@ -117,7 +117,6 @@ class Main {
 
     // Lorsque le serveur du client se connecte au serveur central.
     this.IOClient.on("connect", function () {
-      console.log("connected");
       SELF.IOClient.emit("add_client", SELF.Settings.ClientID);
       SELF.ServerState = true;
       SELF.Log("You are connected to the NOVA server.", "green");
